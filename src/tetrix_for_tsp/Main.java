@@ -1,7 +1,7 @@
 package tetrix_for_tsp;
 import javax.swing.JFrame;
 
-//test matisse
+//test matisse 2
 
 public class Main {
 	public static void main(String[] args) {
