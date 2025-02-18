@@ -2,20 +2,33 @@ package application;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import pieces.Square;
 
 public class Main extends Application {
+
+    private final int width_screen = 700;
+    private final int height_screen = 700;
+    private final int square_size = 50;
+
     @Override
     public void start(Stage primaryStage) {
-        Label label = new Label("Hello, JavaFX with Maven!");
-        StackPane root = new StackPane(label);
-        Scene scene = new Scene(root, 400, 300);
-        
-        primaryStage.setTitle("JavaFX App");
+        Square square = new Square(square_size, Color.BLACK);
+        StackPane root = new StackPane(square);
+        Scene scene = new Scene(root, width_screen, height_screen);
+
+
+        Command command = new Command(scene, square);
+        command.getCommand();
+
+        primaryStage.setTitle("Square move");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        // Demande le focus pour capter les touches du clavier
+        root.requestFocus();
     }
 
     public static void main(String[] args) {
