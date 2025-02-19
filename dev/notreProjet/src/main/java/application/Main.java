@@ -20,8 +20,9 @@ public class Main extends Application {
         Scene scene = new Scene(root, width_screen, height_screen);
 
 
-        Command command = new Command(scene, square);
+        Command command = new Command(scene, square, width_screen, height_screen, square_size);
         command.getCommand();
+        command.updateSquare();
 
         primaryStage.setTitle("Square move");
         primaryStage.setScene(scene);
