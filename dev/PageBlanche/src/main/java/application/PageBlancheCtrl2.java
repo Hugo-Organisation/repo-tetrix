@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -18,7 +19,7 @@ import neige.Flocon;
 import neige.Neige;
 import neige.SensDuVent;
 
-public class PageBlancheCtrl implements javafx.fxml.Initializable  {
+public class PageBlancheCtrl2 implements javafx.fxml.Initializable  {
 	/*=============================================
 	 * Section de code générée par SceneBuilder.
 	 * Si la scéne décrite est enrichie, reporter ici les
@@ -36,15 +37,15 @@ public class PageBlancheCtrl implements javafx.fxml.Initializable  {
 	/*=============================================
 	 * à partir d'ici les attributs ajoutés à main.
 	 */
-	
+
 	/**
 	 * Canvas dans laquelle on va dessiner toute la page.
 	 */
 	private Canvas canvas;
 
 	/**
-	 * Contexte graphique placé dans le canvas.
-	 * Il va servire à dessiner l'image de la scene.
+	 * Contexte graphique fourni par le canvas.
+	 * Il va servir à dessiner l'image de la scène.
 	 */
 	private GraphicsContext  gc;
 
@@ -67,16 +68,25 @@ public class PageBlancheCtrl implements javafx.fxml.Initializable  {
 	public void initialize(URL location, ResourceBundle resources) {
 		// initialisation de la référence sur la classe du modèle.
 		neige = new Neige();
-	
+
 		// mise en place du dessin de l'interface
 		initCanvas();
-		
-		// mise en place des callbacks
-		initMousse();  // gestion de la souris
-		initKeyboard(); // gestion du clavier
-		initAnimation(); // gestion des animations automatiques régulières. 
-		
 
+		// mise en place des callbacks
+		canvas.setOnMouseClicked((event) -> onClic(event)); // la souris
+		canvas.setOnKeyPressed((event) -> onKey(event)); // le clavier
+		
+		// mise en place de l'animation (avec une classe anonyme)
+		new AnimationTimer() {	 // animation de l'image
+			// la classe abstraite AnimationTimer demande le code
+			// de la méthode handle() pour être complètée.
+			@Override
+			public void handle(long now) {
+				// tout le code de l'animation est placé dans une 
+				// méthode écrite plus loin dans ce contrôleur
+				doAnimation(now);
+			}
+		}.start(); // on démarre le thread de l'animation.
 	}
 
 	/**
@@ -91,80 +101,12 @@ public class PageBlancheCtrl implements javafx.fxml.Initializable  {
 		dessinerNeige();
 	}
 
-	/**
-	 * mise en place du callback pour gérer la souris.
-	 */
-	private void initMousse() {
-		// Création de EventHandler par une classe anonyme.
-		EventHandler<MouseEvent> mouseHandler = new EventHandler<>() {
-			// définition de la méthode manquante (handle)
-			@Override
-			public void handle(MouseEvent event) {
-				onClic(event); // méthode écrite plus loin dans ce contrôleur
-
-			}
-		};
-
-		// l'équivalent des lignes ci dessus avec une expression lambda 
-		// (1 seule ligne de code):
-		// EventHandler<MouseEvent> mouseHandler = (event) -> onClic(event); 
-
-		// mise en place du callback pour les events de clic de la souris:
-		canvas.setOnMouseClicked(mouseHandler);
-	}
-	
-	/**
-	 * mise en place du callback pour gérer le clavier.
-	 */
-	private void initKeyboard() {
-		// Création de EventHandler par une classe anonyme.
-		EventHandler<KeyEvent> keyboardHandler = new EventHandler<>() {
-
-			// définition de la méthode manquante (handle)
-			@Override
-			public void handle(KeyEvent event) {
-				onKey(event); // méthode écrite plus loin dans ce contrôleur
-				
-			}
-			
-		};
-
-		// l'équivalent des lignes ci dessus avec une expression lambda 
-		// (une seule ligne de code)
-		// EventHandler<KeyEvent> keyboaedHandler = (event) -> onClic(event); 
-
-		// mise en place du callback pour les events les touches du clavier
-		canvas.setOnKeyPressed(keyboardHandler);
-	}
-
-	/**
-	 * mise en place d'un AnimationTimer pour provoquer des évolutions
-	 * régulières (la méthode handle est appellée 60 fois par secondes
-	 * si la charge le permet).
-	 */
-	private void initAnimation() {
-		// usage d'une classe anonyme pour la création de l'AnimationTimer
-		// (classe abstraite qui demande l'ajout du code de la méthode 
-		//  void handle(long now) ).
-		new AnimationTimer() {
-			
-			// Ajout du code la méthode manquante.
-			// Cette méthode qui va être appelée à chaque tic (60 fois par seconde
-			// si la charge de la machine le permet).
-			// le paramètre "now" est un timestamp exprimé en nanoseconde.
-			@Override
-			public void handle(long now) {
-				doAnimation(now);// méthode écrite plus loin dans ce contrôleur
-			}   
-
-		}.start(); // on lance le thread immédiatement.
-	}
 
 	/**
 	 * redessine toute la scene.
 	 */
-	private void dessinerNeige() {
-		
+	public void dessinerNeige() {
+
 		// 1: dessiner l'image de fond.
 
 		// réccupération de l'URL du fichier image et transformation en chaine de caractères 
@@ -174,7 +116,7 @@ public class PageBlancheCtrl implements javafx.fxml.Initializable  {
 		Image imageFond = new Image(urlFichierImageFond, ConfigVue.LARGEUR, ConfigVue.HAUTEUR, false, false);
 		gc.drawImage(imageFond, 0, 0);	
 
-		
+
 		// 2: dessiner tous les flocons.
 		List<Flocon> flocons = neige.getFlocons();
 
@@ -190,6 +132,42 @@ public class PageBlancheCtrl implements javafx.fxml.Initializable  {
 	}
 
 
+
+
+
+	/**
+	 * Callback appelé lors d'un clic de souris;
+	 * @param event
+	 *           event provoqué par le clic de souris.
+	 */
+	public void onClic(MouseEvent event) {
+		// ajout d'un nouveau flocon sur le paysage là où
+		// le clic a eu lieu.
+		neige.add((int)event.getX(), (int)event.getY());
+		dessinerNeige();
+	}
+
+	/**
+	 * Callback appelé lorsqu'une touche du clavier est appuyée.
+	 * @param event
+	 *          event provoqué par une touche du clavier.
+	 */
+	public void onKey(KeyEvent event) {
+		KeyCode code = event.getCode();
+
+		// on accèlère le vent dans le sens de la touche appuyée
+		// sur le clavier.
+		switch(code) {
+		case LEFT:  
+			neige.changerVitesseDuVent(SensDuVent.VERS_LA_GAUCHE);
+			break;
+		case RIGHT:
+			neige.changerVitesseDuVent(SensDuVent.VERS_LA_DROITE);
+			break;
+		default:
+		}
+	}
+	
 	/**
 	 * attribut de classe pour mémoriser le moment 
 	 * de la dernière action réalisées.
@@ -203,7 +181,7 @@ public class PageBlancheCtrl implements javafx.fxml.Initializable  {
 	 * @param now
 	 *           horodatage de l'appel de la méthode (en nanoseconde).
 	 */
-	private void doAnimation(long now) {
+	public void doAnimation(long now) {
 		// le paramètre de animation est en nanoseconde.
 		// il y a un millard de nanosecondes dans une seconde.
 		final long MILLIARD = 1000000000L;
@@ -221,38 +199,5 @@ public class PageBlancheCtrl implements javafx.fxml.Initializable  {
 
 	}
 
-
-	/**
-	 * Callback appelé lors d'un clic de souris;
-	 * @param event
-	 *           event provoqué par le clic de souris.
-	 */
-	private void onClic(MouseEvent event) {
-		// ajout d'un nouveau flocon sur le paysage là où
-		// le clic a eu lieu.
-		neige.add((int)event.getX(), (int)event.getY());
-		dessinerNeige();
-	}
-	
-	/**
-	 * Callback appelé lorsqu'une touche du clavier est appuyée.
-	 * @param event
-	 *          event provoqué par une touche du clavier.
-	 */
-	private void onKey(KeyEvent event) {
-		KeyCode code = event.getCode();
-		
-		// on accèlère le vent dans le sens de la touche appuyée
-		// sur le clavier.
-		switch(code) {
-	    case LEFT:  
-	    	neige.changerVitesseDuVent(SensDuVent.VERS_LA_GAUCHE);
-	    	break;
-	    case RIGHT:
-	    	neige.changerVitesseDuVent(SensDuVent.VERS_LA_DROITE);
-	    	break;
-	    default:
-	    }
-	}
 
 }

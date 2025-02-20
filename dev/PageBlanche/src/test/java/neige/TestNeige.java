@@ -6,14 +6,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 /**
- * Classe avec quelques exemple de tests pour illustrer l'usage de JUnit
+ * Classe avec quelques exemples de tests pour illustrer l'usage de JUnit
  * 
  * @author Eric Lallet.
  *
  */
 public class TestNeige {
 	/**
-	 * réference sur la classe qui est testée (re-crée avant chaque test par
+	 * réference sur la classe qui est testée (re-créée avant chaque test par
 	 * la méthode setup()
 	 */
 	private Neige underTest;
