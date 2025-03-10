@@ -77,15 +77,15 @@ public class Command {
             for (int j = 0; j < particules[i].length; j++) {
                 if (particules[i][j] != null) {
                     // Vérifier d'abord si on peut tomber en bas
-                    if (particules[i + 1][j] == null) {
+                    if (i < particules.length && particules[i + 1][j] == null) {
                         toMove.add(new int[]{i, j, i + 1, j});
                     } 
                     // Vérifier ensuite si on peut tomber en bas à gauche
-                    else if (j > 0 && particules[i + 1][j - 1] == null) { 
+                    else if (i > 0 && j > 0 && particules[i + 1][j - 1] == null && particules[i][j - 1] == null ) { 
                         toMove.add(new int[]{i, j, i + 1, j - 1});
                     } 
                     // Vérifier si on peut tomber en bas à droite
-                    else if (j < particules[i].length - 1 && particules[i + 1][j + 1] == null) { 
+                    else if (i > 0 && j < particules[i].length - 1 && particules[i + 1][j + 1] == null && particules[i][j + 1] == null ) { 
                         toMove.add(new int[]{i, j, i + 1, j + 1});
                     }
                 }
@@ -151,7 +151,7 @@ public class Command {
             double maxY = height_screen - square_size;
 
             if (checkCollision(newX, newY)) {
-                createParticule(newX, newY);
+                createParticule(newX - vx, newY - vy); // A rendre plus propre
                 square.setTranslateX(0);
                 square.setTranslateY(0);
                 vx = 0;
