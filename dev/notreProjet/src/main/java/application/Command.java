@@ -60,8 +60,8 @@ public class Command {
                 int newY = (int) y + i * particle_size;
     
                 Square particle = new Square(particle_size, Color.RED);
-                particle.setLayoutX(newX);
-                particle.setLayoutY(newY);
+                particle.setX(newX);
+                particle.setY(newY);
                 
                 particules[gridY + i][gridX + j] = particle;
     
@@ -76,8 +76,8 @@ public class Command {
         particules[new_i][new_j] = particle;
 
         // Appliquer la nouvelle position
-        particle.setTranslateX(particle.getTranslateX() + (new_j - old_j) * particle_size);
-        particle.setTranslateY(particle.getTranslateY() + (new_i - old_i) * particle_size);
+        particle.setX(new_j * particle_size);
+        particle.setY(new_i * particle_size);
     
     }
 
@@ -137,8 +137,8 @@ public class Command {
     public void updateSquare() {
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000.0 / FPS), event -> {
 
-            double newX = square.getTranslateX() + vx;
-            double newY = square.getTranslateY() + vy;
+            double newX = square.getX() + vx;
+            double newY = square.getY() + vy;
 
             double minX = 0;
             double maxX = width_screen - square_size;
@@ -147,8 +147,8 @@ public class Command {
 
             if (checkCollision(newX, newY)) {
                 createParticule(newX - vx, newY - vy); // A rendre plus propre
-                square.setTranslateX(0);
-                square.setTranslateY(0);
+                square.setX(0);
+                square.setY(0);
                 vx = 0;
                 vy = 1;
                 return;
@@ -156,8 +156,8 @@ public class Command {
 
             animatedParticule();
 
-            square.setTranslateX(Math.max(minX, Math.min(newX, maxX)));
-            square.setTranslateY(Math.max(minY, Math.min(newY, maxY)));
+            square.setX(Math.max(minX, Math.min(newX, maxX)));
+            square.setY(Math.max(minY, Math.min(newY, maxY)));
         }));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
