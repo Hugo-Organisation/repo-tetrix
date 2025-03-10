@@ -70,6 +70,16 @@ public class Command {
         }
     }
 
+    private void moveParticule(int old_i, int old_j, int new_i, int new_j){
+        Square particle = particules[old_i][old_j];
+        particules[old_i][old_j] = null;
+        particules[new_i][new_j] = particle;
+
+        // Appliquer la nouvelle position
+        particle.setTranslateX(particle.getTranslateX() + (new_j - old_j) * particle_size);
+        particle.setTranslateY(particle.getTranslateY() + (new_i - old_i) * particle_size);
+    
+    }
 
     public void animatedParticule() {
         for (int i = particules.length - 2; i >= 0; i--) {
@@ -78,32 +88,17 @@ public class Command {
                 if (particules[i][j] != null) {
                     // Vérifier d'abord si on peut tomber en bas
                     if (i < particules.length && particules[i + 1][j] == null) {
-                        toMove.add(new int[]{i, j, i + 1, j});
+                        moveParticule(i, j, i + 1, j);
                     } 
                     // Vérifier ensuite si on peut tomber en bas à gauche
                     else if (i > 0 && j > 0 && particules[i + 1][j - 1] == null && particules[i][j - 1] == null ) { 
-                        toMove.add(new int[]{i, j, i + 1, j - 1});
+                        moveParticule(i, j, i + 1, j - 1);
                     } 
                     // Vérifier si on peut tomber en bas à droite
                     else if (i > 0 && j < particules[i].length - 1 && particules[i + 1][j + 1] == null && particules[i][j + 1] == null ) { 
-                        toMove.add(new int[]{i, j, i + 1, j + 1});
+                        moveParticule(i, j, i + 1, j + 1);
                     }
                 }
-            }
-            for (int[] move : toMove) {
-                int old_i = move[0];
-                int old_j = move[1];
-                int new_i = move[2];
-                int new_j = move[3];
-        
-                Square particle = particules[old_i][old_j];
-                particules[old_i][old_j] = null;
-                particules[new_i][new_j] = particle;
-        
-                // Appliquer la nouvelle position
-                particle.setTranslateX(particle.getTranslateX() + (new_j - old_j) * particle_size);
-                particle.setTranslateY(particle.getTranslateY() + (new_i - old_i) * particle_size);
-    
             }
         }
     }
