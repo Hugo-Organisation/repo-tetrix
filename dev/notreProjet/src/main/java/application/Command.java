@@ -48,8 +48,8 @@ public class Command {
     }
 
     public void createParticule(double x, double y) {
-        int gridX = (int) (x / particle_size); // Convertir en indices de grille
-        int gridY = (int) (y / particle_size);
+        int gridX = (int)x / particle_size; // Convertir en indices de grille
+        int gridY = (int)y / particle_size;
         
         for (int i = 0; i < square_size / particle_size; i++) {
             for (int j = 0; j < square_size / particle_size; j++) {
