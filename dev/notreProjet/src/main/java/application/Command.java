@@ -1,8 +1,5 @@
 package application;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Scene;
@@ -83,7 +80,6 @@ public class Command {
 
     public void animatedParticule() {
         for (int i = particules.length - 2; i >= 0; i--) {
-            List<int[]> toMove = new ArrayList<>();
             for (int j = 0; j < particules[i].length; j++) {
                 if (particules[i][j] != null) {
                     // Vérifier d'abord si on peut tomber en bas
@@ -146,7 +142,7 @@ public class Command {
             double maxY = height_screen - square_size;
 
             if (checkCollision(newX, newY)) {
-                createParticule(newX - vx, newY - vy); // A rendre plus propre
+                createParticule(square.getX(), square.getY()); // A rendre plus propre
                 square.setX(0);
                 square.setY(0);
                 vx = 0;
