@@ -1,13 +1,13 @@
-package application;
-
+import controls.GameController;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import pieces.Square;
+import models.Game;
+import views.Square;
 
-public class Main extends Application {
+public class App extends Application {
 
     private final int width_screen = 700;
     private final int height_screen = 700;
@@ -19,8 +19,8 @@ public class Main extends Application {
         Pane root = new Pane(square);
         Scene scene = new Scene(root, width_screen, height_screen);
 
-
-        Command command = new Command(scene, square, root, width_screen, height_screen, square_size);
+        Game game = new Game(width_screen,height_screen,square_size);
+        GameController command = new GameController(scene,square,root,game);
         command.getCommand();
         command.updateSquare();
 
