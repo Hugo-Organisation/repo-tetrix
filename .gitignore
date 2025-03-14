@@ -12,6 +12,9 @@
 **/*.iml
 **/*.idea
 
+# ignorer les dossiers de configurations vscode
+**/.vscode
+
 # ignorer les fichiers générés par LaTeX et quelques éditeurs LaTeX
 **/*~
 **/*.aux
