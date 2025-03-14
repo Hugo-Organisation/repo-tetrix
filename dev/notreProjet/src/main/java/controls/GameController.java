@@ -14,8 +14,8 @@ public class GameController {
     private final Square square;
     private final Pane root;
     private final Game model;
-    private final int v = 5;
-    private double vy = 0;
+    private final int v = 3;
+    private double vy = v;
     private double vx = 0;
     private final int FPS = 60;
 
@@ -28,13 +28,13 @@ public class GameController {
 
     public void getCommand() {
         scene.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.UP) vy = -v;
-            if (event.getCode() == KeyCode.DOWN) vy = v;
+            if (event.getCode() == KeyCode.UP) vy = v - (double)v/2;
+            if (event.getCode() == KeyCode.DOWN) vy = 2*v;
             if (event.getCode() == KeyCode.LEFT) vx = -v;
             if (event.getCode() == KeyCode.RIGHT) vx = v;
         });
         scene.setOnKeyReleased(event -> {
-            if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN) vy = 0;
+            if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN) vy = v;
             if (event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT) vx = 0;
         });
     }
@@ -61,7 +61,6 @@ public class GameController {
                 square.setX(0);
                 square.setY(0);
                 vx = 0;
-                vy = 1;
                 return;
             }
             model.animateParticles();
