@@ -1,8 +1,6 @@
-package application;
-
 import org.junit.jupiter.api.Test;
 
-public class MainTest {
+public class AppTest {
     @Test
     void testMain() {
 
