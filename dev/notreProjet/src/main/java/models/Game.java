@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Random;
+
 import javafx.scene.paint.Color;
 import views.Square;
 
@@ -7,7 +9,7 @@ public class Game {
     private final int widthScreen;
     private final int heightScreen;
     private final int squareSize;
-    private final int particleSize = 5;
+    private final int particleSize = 3;
     private final Square[][] particles;
 
     public Game(int widthScreen, int heightScreen, int squareSize) {
@@ -60,15 +62,41 @@ public class Game {
     }
 
     public void animateParticles() {
+        Random random = new Random();
         for (int i = particles.length - 2; i >= 0; i--) {
             for (int j = 0; j < particles[i].length; j++) {
                 if (particles[i][j] != null) {
+                    double moveLeftOrRight = random.nextDouble();
+                    int balanceLeftAndRight = -1;
+                    boolean borderSideCondition1 = j < particles[i].length - 1;
+                    boolean borderSideCondition2 = j > 0;
+                    if(moveLeftOrRight<0.5){ //Pourquoi ça tombe plus à gauche en moyenne ?
+                        balanceLeftAndRight = 1;
+                        borderSideCondition1 = j > 0;
+                        borderSideCondition2 = j < particles[i].length - 1;
+                    }
+
                     if (i < particles.length - 1 && particles[i + 1][j] == null) {
-                        moveParticle(i, j, i + 1, j);
-                    } else if (j > 0 && i < particles.length - 1 && particles[i + 1][j - 1] == null && particles[i][j - 1] == null) {
-                        moveParticle(i, j, i + 1, j - 1);
-                    } else if (j < particles[i].length - 1 && i < particles.length - 1 && particles[i + 1][j + 1] == null && particles[i][j + 1] == null) {
-                        moveParticle(i, j, i + 1, j + 1);
+                        // Si on peut tomber juste en dessous alors on à une proba d'aller sur le coté
+                        double sideMoveProba = random.nextDouble();
+                        double seuil = 0.7;
+                        if(sideMoveProba<seuil){
+                            if(borderSideCondition1 && particles[i][j - 1*balanceLeftAndRight] == null){
+                                moveParticle(i, j, i, j - 1*balanceLeftAndRight);
+                            }
+                            else if(borderSideCondition2 && particles[i][j + 1*balanceLeftAndRight] == null){
+                                moveParticle(i, j, i, j + 1*balanceLeftAndRight);
+                            }
+                        }
+                        else{
+                            moveParticle(i, j, i + 1, j);
+                        }
+                    }
+                    else if (borderSideCondition1 && i < particles.length - 1 && particles[i + 1][j - 1*balanceLeftAndRight] == null && particles[i][j - 1*balanceLeftAndRight] == null) {
+                        moveParticle(i, j, i, j - 1*balanceLeftAndRight);
+                    }
+                    else if (borderSideCondition2 && i < particles.length - 1 && particles[i + 1][j + 1*balanceLeftAndRight] == null && particles[i][j + 1*balanceLeftAndRight] == null) {
+                        moveParticle(i, j, i, j + 1*balanceLeftAndRight);
                     }
                 }
             }

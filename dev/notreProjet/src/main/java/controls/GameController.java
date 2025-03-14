@@ -28,7 +28,7 @@ public class GameController {
 
     public void getCommand() {
         scene.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.UP) vy = v - (double)v/2;
+            if (event.getCode() == KeyCode.UP) vy = 0;
             if (event.getCode() == KeyCode.DOWN) vy = 2*v;
             if (event.getCode() == KeyCode.LEFT) vx = -v;
             if (event.getCode() == KeyCode.RIGHT) vx = v;
