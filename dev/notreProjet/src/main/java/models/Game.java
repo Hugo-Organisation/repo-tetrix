@@ -79,7 +79,7 @@ public class Game {
                     if (i < particles.length - 1 && particles[i + 1][j] == null) {
                         // Si on peut tomber juste en dessous alors on à une proba d'aller sur le coté
                         double sideMoveProba = random.nextDouble();
-                        double seuil = 0.7;
+                        double seuil = 0.2;
                         if(sideMoveProba<seuil){
                             if(borderSideCondition1 && particles[i][j - 1*balanceLeftAndRight] == null){
                                 moveParticle(i, j, i, j - 1*balanceLeftAndRight);
