@@ -40,7 +40,8 @@ public class GameController {
     }
 
     public void updateSquare() {
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000.0 / FPS), event -> {
+        // isoler la methode de l'expresssion lambda
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000.0 / FPS), event -> { 
             double newX = square.getX() + vx;
             double newY = square.getY() + vy;
 

@@ -48,6 +48,11 @@ public class Game {
         return false;
     }
 
+    /**
+     * 
+     * @param x
+     * @param y
+     */
     public void createParticle(double x, double y) {
         int gridX = (int) x / particleSize;
         int gridY = (int) y / particleSize;
@@ -70,7 +75,7 @@ public class Game {
                     int balanceLeftAndRight = -1;
                     boolean borderSideCondition1 = j < particles[i].length - 1;
                     boolean borderSideCondition2 = j > 0;
-                    if(moveLeftOrRight<0.5){ //Pourquoi ça tombe plus à gauche en moyenne ?
+                    if(moveLeftOrRight<0.5){ //Pourquoi il y a du vent vers la gauche ?
                         balanceLeftAndRight = 1;
                         borderSideCondition1 = j > 0;
                         borderSideCondition2 = j < particles[i].length - 1;
@@ -79,7 +84,7 @@ public class Game {
                     if (i < particles.length - 1 && particles[i + 1][j] == null) {
                         // Si on peut tomber juste en dessous alors on à une proba d'aller sur le coté
                         double sideMoveProba = random.nextDouble();
-                        double seuil = 0.7;
+                        double seuil = 0.1;
                         if(sideMoveProba<seuil){
                             if(borderSideCondition1 && particles[i][j - 1*balanceLeftAndRight] == null){
                                 moveParticle(i, j, i, j - 1*balanceLeftAndRight);

@@ -8,6 +8,7 @@ public class App extends Application {
     private final int width_screen = 700;
     private final int height_screen = 700;
     private final int square_size = 100;
+    //définir la taille des particules ici
 
     @Override
     public void start(Stage primaryStage) {
