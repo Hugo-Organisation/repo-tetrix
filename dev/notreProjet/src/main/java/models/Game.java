@@ -1,5 +1,6 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import javafx.scene.paint.Color;
@@ -11,12 +12,16 @@ public class Game {
     private final int squareSize;
     private final int particleSize = 3;
     private final Square[][] particles;
+    private final ArrayList<Block> newBlocks;
+    private final ArrayList<Block> deletedBlocks;
 
     public Game(int widthScreen, int heightScreen, int squareSize) {
         this.widthScreen = widthScreen;
         this.heightScreen = heightScreen;
         this.squareSize = squareSize;
         this.particles = new Square[widthScreen / particleSize][heightScreen / particleSize];
+        newBlocks = new ArrayList<>();
+        deletedBlocks = new ArrayList<>();
     }
 
     public int getWidth(){
@@ -29,6 +34,14 @@ public class Game {
 
     public int getSquareSize(){
         return this.squareSize;
+    }
+
+    public ArrayList<Block> getNewBlocks(){
+        return newBlocks;
+    }
+
+    public ArrayList<Block> getDeletedBlocks(){
+        return newBlocks;
     }
 
     public boolean checkCollision(double newX, double newY) {
@@ -58,7 +71,7 @@ public class Game {
         int gridY = (int) y / particleSize;
         for (int i = 0; i < squareSize / particleSize; i++) {
             for (int j = 0; j < squareSize / particleSize; j++) {
-                Square particle = new Square(particleSize, Color.RED);
+                Square particle = new Square(particleSize, Color.RED, null);
                 particle.setX(x + j * particleSize);
                 particle.setY(y + i * particleSize);
                 particles[gridY + i][gridX + j] = particle;

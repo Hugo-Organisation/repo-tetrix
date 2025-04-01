@@ -14,14 +14,14 @@ public class GameView{
     }
 
     public static void startGame(Stage primaryStage,int square_size,int width,int height) {
-        Square square = new Square(square_size, Color.BLACK);
+        Square square = new Square(square_size, Color.BLACK, null);
         Pane root = new Pane(square);
         Scene gameScene = new Scene(root, width, height);
 
         Game game = new Game(width, height, square_size);
         GameController command = new GameController(gameScene, square, root, game);
         command.getCommand();
-        command.updateSquare();
+        command.updateFrame();
 
         primaryStage.setTitle("Game");
         primaryStage.setScene(gameScene);
