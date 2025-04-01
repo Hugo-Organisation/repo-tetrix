@@ -1,11 +1,14 @@
 package models;
 
+import javafx.scene.paint.Color;
+
+
 public class Block {
-    private String color;
+    private Color color;
     private int x;
     private int y;
 
-    public Block(int X, int Y, String C){
+    public Block(int X, int Y, Color C){
         x = X;
         y = Y;
         color = C;

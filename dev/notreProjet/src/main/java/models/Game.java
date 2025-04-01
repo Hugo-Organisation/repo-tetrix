@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javafx.scene.paint.Color;
-import views.Square;
 
 public class Game {
     private final int widthScreen;
     private final int heightScreen;
     private final int squareSize;
     private final int particleSize = 3;
-    private final Square[][] particles;
+    private final Block[][] particles;
     private final ArrayList<Block> newBlocks;
     private final ArrayList<Block> deletedBlocks;
 
@@ -19,7 +18,7 @@ public class Game {
         this.widthScreen = widthScreen;
         this.heightScreen = heightScreen;
         this.squareSize = squareSize;
-        this.particles = new Square[widthScreen / particleSize][heightScreen / particleSize];
+        this.particles = new Block[widthScreen / particleSize][heightScreen / particleSize];
         newBlocks = new ArrayList<>();
         deletedBlocks = new ArrayList<>();
     }
@@ -71,10 +70,9 @@ public class Game {
         int gridY = (int) y / particleSize;
         for (int i = 0; i < squareSize / particleSize; i++) {
             for (int j = 0; j < squareSize / particleSize; j++) {
-                Square particle = new Square(particleSize, Color.RED, null);
-                particle.setX(x + j * particleSize);
-                particle.setY(y + i * particleSize);
+                Block particle = new Block(gridY + i, gridX + j, Color.RED);
                 particles[gridY + i][gridX + j] = particle;
+                newBlocks.add(particle);
             }
         }
     }
@@ -122,14 +120,12 @@ public class Game {
     }
 
     private void moveParticle(int oldI, int oldJ, int newI, int newJ) {
-        Square particle = particles[oldI][oldJ];
+        Block particle = particles[oldI][oldJ];
         particles[oldI][oldJ] = null;
         particles[newI][newJ] = particle;
-        particle.setX(newJ * particleSize);
-        particle.setY(newI * particleSize);
     }
 
-    public Square[][] getParticles() {
+    public Block[][] getParticles() {
         return particles;
     }
 }

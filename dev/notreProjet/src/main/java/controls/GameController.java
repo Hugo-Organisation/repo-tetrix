@@ -1,5 +1,7 @@
 package controls;
 
+import java.util.ArrayList;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Scene;
@@ -20,7 +22,7 @@ public class GameController {
     private double vy = v;
     private double vx = 0;
     private final int FPS = 60;
-    private Square[][] particles;
+    private final Square[][] particles;
 
     public GameController(Scene scene, Square square, Pane root, Game model) {
         this.scene = scene;
@@ -44,36 +46,49 @@ public class GameController {
     }
 
     private void addNewBlocks(){
-        for(Block block : model.getNewBlocks()){
+        ArrayList<Block> list = model.getNewBlocks();
+        ArrayList<Block> deletedBlock = new ArrayList<>();
+        for(Block block : list){
             int i = block.getX();
             int j = block.getY();
             particles[i][j] = new Square(v, Color.RED, block);
+            root.getChildren().add(particles[i][j]);
+            deletedBlock.add(block);
+        }
+        for(Block block : deletedBlock){
+            list.remove(block);
         }
     }
 
     private void removeDeletedBlocks(){
-        for(Block block : model.getNewBlocks()){
+        ArrayList<Block> list = model.getNewBlocks();
+        for(Block block : list){
             int i = block.getX();
             int j = block.getY();
             particles[i][j] = null;
+            // list.remove(block);
         }
     }
 
-    private void _updateSquare(){
-        for (int i = particles.length - 2; i >= 0; i--) {
-            for (int j = 0; j < particles[i].length; j++){
+    private void updateParticles(){
+        addNewBlocks();
+        removeDeletedBlocks();
+        for (int i = particles.length - 1; i >= 0; i--) {
+            for (int j = 0; j < particles[i].length - 1; j++){
                 Square particle = particles[i][j];
-                Block block = particle.getRef();
-                particle.setX(block.getX());
-                particle.setY(block.getY());
-                particles[block.getX()][block.getY()] = particle;
-                if(i != block.getX() || j!= block.getY()){
-                    particles[i][j] = null;
+                if(particle != null){
+                    Block block = particle.getRef();
+                    particle.setX(block.getX()*v);
+                    particle.setY(block.getY()*v);
+                    particles[block.getX()][block.getY()] = particle;
+                    if(i != block.getX() || j!= block.getY()){
+                        particles[i][j] = null;
+                    }
                 }
             }
         }
     }
-    
+
     private void updateSquare() {
         double newX = square.getX() + vx;
         double newY = square.getY() + vy;
@@ -85,7 +100,7 @@ public class GameController {
     
         if (model.checkCollision(newX, newY)) {
             model.createParticle(square.getX(), square.getY());
-            for (Square[] row : model.getParticles()) {
+            for (Square[] row : particles) {
                 for (Square particle : row) {
                     if (particle != null && !root.getChildren().contains(particle)) {
                         root.getChildren().add(particle);
@@ -98,6 +113,7 @@ public class GameController {
             return;
         }
         model.animateParticles();
+        updateParticles();
         square.setX(Math.max(minX, Math.min(newX, maxX)));
         square.setY(Math.max(minY, Math.min(newY, maxY)));
     }
