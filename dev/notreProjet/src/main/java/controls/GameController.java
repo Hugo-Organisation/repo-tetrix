@@ -24,7 +24,8 @@ public class GameController {
     private final int particleSize = 5;
     private final int squareRatio = 20;
     private final int widthRatio = 7;
-    private final int square_size = 20*particleSize;
+    private final int heightRatio = 7;
+
     private final int width = widthRatio*squareRatio*particleSize;
     private final int height = widthRatio*squareRatio*particleSize;
     private final int v = particleSize;
@@ -41,7 +42,7 @@ public class GameController {
         square = new Square(squareRatio*particleSize, Color.BLACK);
         root = new Pane(square);
         scene = new Scene(root, width, height);
-        model = new Game(width, height, square_size,square_size/particleSize);//s'occuper de square_size dans game
+        model = new Game(widthRatio*squareRatio, heightRatio*squareRatio,squareRatio);
 
         getCommand();
         updateFrame();
@@ -112,8 +113,8 @@ public class GameController {
         double maxX = scene.getWidth() - squareRatio*particleSize;
         double minY = 0;
         double maxY = scene.getHeight() - squareRatio*particleSize;
-        if (model.checkCollision(newX, newY)) {
-            model.createParticle(square.getX(), square.getY());
+        if (model.checkCollision((int)newX/particleSize, (int)newY/particleSize)) {
+            model.createParticle((int)square.getX()/particleSize, (int)square.getY()/particleSize);
             square.setX(0);
             square.setY(0);
             vx = 0;

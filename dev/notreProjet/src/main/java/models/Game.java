@@ -6,22 +6,19 @@ import java.util.Random;
 import javafx.scene.paint.Color;
 
 public class Game {
-    private final int widthScreen;
-    private final int heightScreen;
-    private final int squareSize;
+    private final int width;
+    private final int height;
     private final int squareRatio;
-    private final int particleSize = 5;
     private final Block[][] particles;
     private final ArrayList<Block> newBlocks;
     private final ArrayList<Block> deletedBlocks;
     private final ArrayList<Block> movedBlocks;
 
-    public Game(int widthScreen, int heightScreen, int squareSize, int squareRatio) {
-        this.widthScreen = widthScreen;
-        this.heightScreen = heightScreen;
-        this.squareSize = squareSize;
+    public Game(int width, int height, int squareRatio) {
+        this.width = width;
+        this.height = height;
         this.squareRatio = squareRatio;
-        this.particles = new Block[widthScreen / particleSize][heightScreen / particleSize];
+        this.particles = new Block[width][height];
         newBlocks = new ArrayList<>();
         deletedBlocks = new ArrayList<>();
         movedBlocks = new ArrayList<>();
@@ -39,12 +36,12 @@ public class Game {
         return movedBlocks;
     }
 
-    public boolean checkCollision(double newX, double newY) {
-        if (newY >= heightScreen - squareSize) return true;
-        int gridStartX = (int) (newX / particleSize);
-        int gridEndX = (int) ((newX + squareSize - 1) / particleSize);
-        int gridStartY = (int) (newY / particleSize);
-        int gridEndY = (int) ((newY + squareSize - 1) / particleSize);
+    public boolean checkCollision(int newX, int newY) {
+        if (newY >= height - squareRatio) return true;
+        int gridStartX = newX;
+        int gridEndX = newX + squareRatio - 1;
+        int gridStartY = newY;
+        int gridEndY = newY + squareRatio - 1;
 
         for (int i = gridStartY; i <= gridEndY; i++) {
             for (int j = gridStartX; j <= gridEndX; j++) {
@@ -61,13 +58,11 @@ public class Game {
      * @param x
      * @param y
      */
-    public void createParticle(double x, double y) {
-        int gridX = (int) x / particleSize;
-        int gridY = (int) y / particleSize;
-        for (int i = 0; i < squareSize / particleSize; i++) {
-            for (int j = 0; j < squareSize / particleSize; j++) {
-                Block particle = new Block(gridX + j, gridY + i, Color.RED);
-                particles[gridY + i][gridX + j] = particle;
+    public void createParticle(int x, int y) {
+        for (int i = 0; i < squareRatio; i++) {
+            for (int j = 0; j < squareRatio; j++) {
+                Block particle = new Block(x + j, y + i, Color.RED);
+                particles[y + i][x + j] = particle;
                 newBlocks.add(particle);
             }
         }
