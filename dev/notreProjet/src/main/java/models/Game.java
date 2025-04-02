@@ -9,7 +9,7 @@ public class Game {
     private final int widthScreen;
     private final int heightScreen;
     private final int squareSize;
-    private final int particleSize = 3;
+    private final int particleSize = 5;
     private final Block[][] particles;
     private final ArrayList<Block> newBlocks;
     private final ArrayList<Block> deletedBlocks;
@@ -79,7 +79,7 @@ public class Game {
 
     public void animateParticles() {
         Random random = new Random();
-        for (int i = particles.length - 2; i >= 0; i--) {
+        for (int i = particles.length - 1; i >= 0; i--) {
             for (int j = 0; j < particles[i].length; j++) {
                 if (particles[i][j] != null) {
                     double moveLeftOrRight = random.nextDouble();

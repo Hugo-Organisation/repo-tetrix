@@ -15,10 +15,11 @@ import views.Square;
 
 public class GameController {
     private final Scene scene;
+    private int currentFrame = 0;
     private final Square square;
     private final Pane root;
     private final Game model;
-    private final int v = 3;
+    private final int v = 5;
     private double vy = v;
     private double vx = 0;
     private final int FPS = 60;
@@ -93,15 +94,14 @@ public class GameController {
         }
     }
 
-    private void updateSquare() {
+    private void updateSquare(int currentFrame) {
         double newX = square.getX() + vx;
         double newY = square.getY() + vy;
-    
+        
         double minX = 0;
         double maxX = model.getWidth() - model.getSquareSize();
         double minY = 0;
         double maxY = model.getHeight() - model.getSquareSize();
-    
         if (model.checkCollision(newX, newY)) {
             model.createParticle(square.getX(), square.getY());
             for (Square[] row : particles) {
@@ -116,14 +116,16 @@ public class GameController {
             vx = 0;
             return;
         }
+        if (currentFrame%50==0) {
+            square.setY(Math.max(minY, Math.min(newY, maxY)));
+        }
+        square.setX(Math.max(minX, Math.min(newX, maxX)));
         model.animateParticles();
         updateParticles();
-        square.setX(Math.max(minX, Math.min(newX, maxX)));
-        square.setY(Math.max(minY, Math.min(newY, maxY)));
     }
 
     public void updateFrame() {
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000.0 / FPS), event -> {updateSquare();}));
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000.0 / FPS), event -> {currentFrame++;updateSquare(currentFrame);}));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
     }
