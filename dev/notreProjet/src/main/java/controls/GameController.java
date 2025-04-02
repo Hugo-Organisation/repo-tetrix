@@ -28,11 +28,11 @@ public class GameController {
 
     private final int width = widthRatio*squareRatio*particleSize;
     private final int height = widthRatio*squareRatio*particleSize;
+    private final double initialX = (widthRatio/2)*squareRatio*particleSize;
     private final int v = particleSize;
     private double vy = v;
     private double vx = 0;
     private final int FPS = 60;
-    private int currentFrame = 0;
     private final HashMap<Block,Square> particles = new HashMap<>();
 
     public GameController() {
@@ -40,6 +40,7 @@ public class GameController {
 
     public void startGame(Stage primaryStage) {
         square = new Square(squareRatio*particleSize, Color.BLACK);
+        square.setX(initialX);
         root = new Pane(square);
         scene = new Scene(root, width, height);
         model = new Game(widthRatio*squareRatio, heightRatio*squareRatio,squareRatio);
@@ -105,7 +106,7 @@ public class GameController {
         }
     }
 
-    private void updateSquare(int currentFrame) {
+    private void updateSquare() {
         double newX = square.getX() + vx;
         double newY = square.getY() + vy;
         
@@ -115,14 +116,13 @@ public class GameController {
         double maxY = scene.getHeight() - squareRatio*particleSize;
         if (model.checkCollision((int)newX/particleSize, (int)newY/particleSize)) {
             model.createParticle((int)square.getX()/particleSize, (int)square.getY()/particleSize);
-            square.setX(0);
+            square.setX(initialX);
             square.setY(0);
             vx = 0;
             return;
         }
-        if (currentFrame%1==0) {
-            square.setY(Math.max(minY, Math.min(newY, maxY)));
-        }
+        
+        square.setY(Math.max(minY, Math.min(newY, maxY)));
         square.setX(Math.max(minX, Math.min(newX, maxX)));
         model.animateParticles();
 
@@ -132,7 +132,7 @@ public class GameController {
     }
 
     public void updateFrame() {
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000.0 / FPS), event -> {currentFrame++;updateSquare(currentFrame);}));
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000.0 / FPS), event -> {updateSquare();}));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
     }
