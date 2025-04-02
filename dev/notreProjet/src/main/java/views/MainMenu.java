@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 
 
 public class MainMenu extends VBox{
-    public MainMenu(Stage primaryStage,int square_size,int width,int height){
+    public MainMenu(Stage primaryStage){
         super();
 
         Button startButton = new Button("Démarrer le jeu");
@@ -15,7 +15,7 @@ public class MainMenu extends VBox{
         startButton.setOnAction(
             e -> {
             GameController controller = new GameController();
-            controller.startGame(primaryStage,width,height);
+            controller.startGame(primaryStage);
             }
         );
 

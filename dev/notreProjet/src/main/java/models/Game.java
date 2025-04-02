@@ -9,32 +9,22 @@ public class Game {
     private final int widthScreen;
     private final int heightScreen;
     private final int squareSize;
+    private final int squareRatio;
     private final int particleSize = 5;
     private final Block[][] particles;
     private final ArrayList<Block> newBlocks;
     private final ArrayList<Block> deletedBlocks;
     private final ArrayList<Block> movedBlocks;
 
-    public Game(int widthScreen, int heightScreen, int squareSize) {
+    public Game(int widthScreen, int heightScreen, int squareSize, int squareRatio) {
         this.widthScreen = widthScreen;
         this.heightScreen = heightScreen;
         this.squareSize = squareSize;
+        this.squareRatio = squareRatio;
         this.particles = new Block[widthScreen / particleSize][heightScreen / particleSize];
         newBlocks = new ArrayList<>();
         deletedBlocks = new ArrayList<>();
         movedBlocks = new ArrayList<>();
-    }
-
-    public int getWidth(){
-        return this.widthScreen;
-    }
-
-    public int getHeight(){
-        return this.heightScreen;
-    }
-
-    public int getSquareSize(){
-        return this.squareSize;
     }
 
     public ArrayList<Block> getNewBlocks(){

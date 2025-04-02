@@ -16,26 +16,32 @@ import models.Game;
 import views.Square;
 
 public class GameController {
-    private Scene scene;
-    private int currentFrame = 0;
-    private final int square_size = 100;
     private Square square;
     private Pane root;
+    private Scene scene;
     private Game model;
-    private final int v = 5;
+
+    private final int particleSize = 5;
+    private final int squareRatio = 20;
+    private final int widthRatio = 7;
+    private final int square_size = 20*particleSize;
+    private final int width = widthRatio*squareRatio*particleSize;
+    private final int height = widthRatio*squareRatio*particleSize;
+    private final int v = particleSize;
     private double vy = v;
     private double vx = 0;
     private final int FPS = 60;
+    private int currentFrame = 0;
     private final HashMap<Block,Square> particles = new HashMap<>();
 
     public GameController() {
     }
 
-    public void startGame(Stage primaryStage, int width,int height) {
-        square = new Square(square_size, Color.BLACK);
+    public void startGame(Stage primaryStage) {
+        square = new Square(squareRatio*particleSize, Color.BLACK);
         root = new Pane(square);
         scene = new Scene(root, width, height);
-        model = new Game(width, height, square_size);
+        model = new Game(width, height, square_size,square_size/particleSize);//s'occuper de square_size dans game
 
         getCommand();
         updateFrame();
@@ -103,9 +109,9 @@ public class GameController {
         double newY = square.getY() + vy;
         
         double minX = 0;
-        double maxX = model.getWidth() - model.getSquareSize();
+        double maxX = scene.getWidth() - squareRatio*particleSize;
         double minY = 0;
-        double maxY = model.getHeight() - model.getSquareSize();
+        double maxY = scene.getHeight() - squareRatio*particleSize;
         if (model.checkCollision(newX, newY)) {
             model.createParticle(square.getX(), square.getY());
             square.setX(0);
