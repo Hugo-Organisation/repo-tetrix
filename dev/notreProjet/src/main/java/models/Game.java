@@ -70,7 +70,7 @@ public class Game {
         int gridY = (int) y / particleSize;
         for (int i = 0; i < squareSize / particleSize; i++) {
             for (int j = 0; j < squareSize / particleSize; j++) {
-                Block particle = new Block(gridY + i, gridX + j, Color.RED);
+                Block particle = new Block(gridX + j, gridY + i, Color.RED);
                 particles[gridY + i][gridX + j] = particle;
                 newBlocks.add(particle);
             }
@@ -123,6 +123,7 @@ public class Game {
         Block particle = particles[oldI][oldJ];
         particles[oldI][oldJ] = null;
         particles[newI][newJ] = particle;
+        particle.setXY(newJ,newI);
     }
 
     public Block[][] getParticles() {

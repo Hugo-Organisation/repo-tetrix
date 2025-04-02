@@ -47,26 +47,30 @@ public class GameController {
 
     private void addNewBlocks(){
         ArrayList<Block> list = model.getNewBlocks();
-        ArrayList<Block> deletedBlock = new ArrayList<>();
+        ArrayList<Block> toDelete = new ArrayList<>();
         for(Block block : list){
-            int i = block.getX();
-            int j = block.getY();
+            int j = block.getX();
+            int i = block.getY();
             particles[i][j] = new Square(v, Color.RED, block);
             root.getChildren().add(particles[i][j]);
-            deletedBlock.add(block);
+            toDelete.add(block);
         }
-        for(Block block : deletedBlock){
+        for(Block block : toDelete){
             list.remove(block);
         }
     }
 
     private void removeDeletedBlocks(){
         ArrayList<Block> list = model.getNewBlocks();
+        ArrayList<Block> toDelete = new ArrayList<>();
         for(Block block : list){
-            int i = block.getX();
-            int j = block.getY();
+            int j = block.getX();
+            int i = block.getY();
             particles[i][j] = null;
-            // list.remove(block);
+            toDelete.add(block);
+        }
+        for(Block block : toDelete){
+            list.remove(block);
         }
     }
 
@@ -80,8 +84,8 @@ public class GameController {
                     Block block = particle.getRef();
                     particle.setX(block.getX()*v);
                     particle.setY(block.getY()*v);
-                    particles[block.getX()][block.getY()] = particle;
-                    if(i != block.getX() || j!= block.getY()){
+                    particles[block.getY()][block.getX()] = particle;
+                    if(j != block.getX() || i!= block.getY()){
                         particles[i][j] = null;
                     }
                 }
