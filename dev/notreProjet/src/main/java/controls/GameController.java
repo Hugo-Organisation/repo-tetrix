@@ -9,29 +9,43 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import models.Block;
 import models.Game;
 import views.Square;
 
 public class GameController {
-    private final Scene scene;
+    private Scene scene;
     private int currentFrame = 0;
-    private final Square square;
-    private final Pane root;
-    private final Game model;
+    private final int square_size = 100;
+    private Square square;
+    private Pane root;
+    private Game model;
     private final int v = 5;
     private double vy = v;
     private double vx = 0;
     private final int FPS = 60;
-    private final HashMap<Block,Square> particles;
+    private final HashMap<Block,Square> particles = new HashMap<>();
 
-    public GameController(Scene scene, Square square, Pane root, Game model) {
-        this.scene = scene;
-        this.square = square;
-        this.root = root;
-        this.model = model;
-        particles = new HashMap<>();
+    public GameController() {
+    }
+
+    public void startGame(Stage primaryStage, int width,int height) {
+        square = new Square(square_size, Color.BLACK);
+        root = new Pane(square);
+        scene = new Scene(root, width, height);
+        model = new Game(width, height, square_size);
+
+        getCommand();
+        updateFrame();
+
+        primaryStage.setTitle("Game");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+        
+        // Demande le focus pour capter les touches du clavier
+        root.requestFocus();
     }
 
     public void getCommand() {

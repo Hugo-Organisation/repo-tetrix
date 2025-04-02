@@ -1,5 +1,6 @@
 package views;
 
+import controls.GameController;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -13,7 +14,8 @@ public class MainMenu extends VBox{
 
         startButton.setOnAction(
             e -> {
-            GameView.startGame(primaryStage,square_size,width,height);
+            GameController controller = new GameController();
+            controller.startGame(primaryStage,width,height);
             }
         );
 
