@@ -14,7 +14,7 @@ public class GameView{
     }
 
     public static void startGame(Stage primaryStage,int square_size,int width,int height) {
-        Square square = new Square(square_size, Color.BLACK, null);
+        Square square = new Square(square_size, Color.BLACK);
         Pane root = new Pane(square);
         Scene gameScene = new Scene(root, width, height);
 

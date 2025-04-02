@@ -1,6 +1,7 @@
 package controls;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -23,14 +24,14 @@ public class GameController {
     private double vy = v;
     private double vx = 0;
     private final int FPS = 60;
-    private final Square[][] particles;
+    private final HashMap<Block,Square> particles;
 
     public GameController(Scene scene, Square square, Pane root, Game model) {
         this.scene = scene;
         this.square = square;
         this.root = root;
         this.model = model;
-        particles = new Square[(int)scene.getWidth()/v][(int)scene.getHeight()/v];
+        particles = new HashMap<>();
     }
 
     public void getCommand() {
@@ -50,10 +51,11 @@ public class GameController {
         ArrayList<Block> list = model.getNewBlocks();
         ArrayList<Block> toDelete = new ArrayList<>();
         for(Block block : list){
-            int j = block.getX();
-            int i = block.getY();
-            particles[i][j] = new Square(v, Color.RED, block);
-            root.getChildren().add(particles[i][j]);
+            Square particle = new Square(v, Color.RED);
+            particle.setX(block.getX()*v);
+            particle.setY(block.getY()*v);
+            particles.put(block, particle);
+            root.getChildren().add(particle);
             toDelete.add(block);
         }
         for(Block block : toDelete){
@@ -65,9 +67,7 @@ public class GameController {
         ArrayList<Block> list = model.getNewBlocks();
         ArrayList<Block> toDelete = new ArrayList<>();
         for(Block block : list){
-            int j = block.getX();
-            int i = block.getY();
-            particles[i][j] = null;
+            particles.remove(block);
             toDelete.add(block);
         }
         for(Block block : toDelete){
@@ -76,21 +76,11 @@ public class GameController {
     }
 
     private void updateParticles(){
-        addNewBlocks();
-        removeDeletedBlocks();
-        for (int i = particles.length - 1; i >= 0; i--) {
-            for (int j = 0; j < particles[i].length - 1; j++){
-                Square particle = particles[i][j];
-                if(particle != null){
-                    Block block = particle.getRef();
-                    particle.setX(block.getX()*v);
-                    particle.setY(block.getY()*v);
-                    particles[block.getY()][block.getX()] = particle;
-                    if(j != block.getX() || i!= block.getY()){
-                        particles[i][j] = null;
-                    }
-                }
-            }
+        ArrayList<Block> list = model.getMovedBlocks();
+        for(Block block : list){
+            Square particle = particles.get(block);
+            particle.setX(block.getX()*v);
+            particle.setY(block.getY()*v);
         }
     }
 
@@ -104,23 +94,19 @@ public class GameController {
         double maxY = model.getHeight() - model.getSquareSize();
         if (model.checkCollision(newX, newY)) {
             model.createParticle(square.getX(), square.getY());
-            for (Square[] row : particles) {
-                for (Square particle : row) {
-                    if (particle != null && !root.getChildren().contains(particle)) {
-                        root.getChildren().add(particle);
-                    }
-                }
-            }
             square.setX(0);
             square.setY(0);
             vx = 0;
             return;
         }
-        if (currentFrame%50==0) {
+        if (currentFrame%1==0) {
             square.setY(Math.max(minY, Math.min(newY, maxY)));
         }
         square.setX(Math.max(minX, Math.min(newX, maxX)));
         model.animateParticles();
+
+        addNewBlocks();
+        removeDeletedBlocks();
         updateParticles();
     }
 

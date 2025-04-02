@@ -13,6 +13,7 @@ public class Game {
     private final Block[][] particles;
     private final ArrayList<Block> newBlocks;
     private final ArrayList<Block> deletedBlocks;
+    private final ArrayList<Block> movedBlocks;
 
     public Game(int widthScreen, int heightScreen, int squareSize) {
         this.widthScreen = widthScreen;
@@ -21,6 +22,7 @@ public class Game {
         this.particles = new Block[widthScreen / particleSize][heightScreen / particleSize];
         newBlocks = new ArrayList<>();
         deletedBlocks = new ArrayList<>();
+        movedBlocks = new ArrayList<>();
     }
 
     public int getWidth(){
@@ -40,7 +42,11 @@ public class Game {
     }
 
     public ArrayList<Block> getDeletedBlocks(){
-        return newBlocks;
+        return deletedBlocks;
+    }
+
+    public ArrayList<Block> getMovedBlocks(){
+        return movedBlocks;
     }
 
     public boolean checkCollision(double newX, double newY) {
@@ -80,13 +86,17 @@ public class Game {
     public void animateParticles() {
         Random random = new Random();
         for (int i = particles.length - 1; i >= 0; i--) {
-            for (int j = 0; j < particles[i].length; j++) {
+            double moveLeftOrRight = random.nextDouble();
+            int start = moveLeftOrRight < 0.5 ? 0 : particles[i].length - 1;
+            int end = moveLeftOrRight < 0.5 ? particles[i].length : -1;
+            int step = moveLeftOrRight < 0.5 ? 1 : -1;
+            for (int j = start; j != end; j += step) {
                 if (particles[i][j] != null) {
-                    double moveLeftOrRight = random.nextDouble();
+                    moveLeftOrRight = random.nextDouble();
                     int balanceLeftAndRight = -1;
                     boolean borderSideCondition1 = j < particles[i].length - 1;
                     boolean borderSideCondition2 = j > 0;
-                    if(moveLeftOrRight<0.5){ //Pourquoi il y a du vent vers la gauche ?
+                    if(moveLeftOrRight<0.5){ 
                         balanceLeftAndRight = 1;
                         borderSideCondition1 = j > 0;
                         borderSideCondition2 = j < particles[i].length - 1;
@@ -95,7 +105,7 @@ public class Game {
                     if (i < particles.length - 1 && particles[i + 1][j] == null) {
                         // Si on peut tomber juste en dessous alors on à une proba d'aller sur le coté
                         double sideMoveProba = random.nextDouble();
-                        double seuil = 0.1;
+                        double seuil = 0.2;
                         if(sideMoveProba<seuil){
                             if(borderSideCondition1 && particles[i][j - 1*balanceLeftAndRight] == null){
                                 moveParticle(i, j, i, j - 1*balanceLeftAndRight);
@@ -124,6 +134,7 @@ public class Game {
         particles[oldI][oldJ] = null;
         particles[newI][newJ] = particle;
         particle.setXY(newJ,newI);
+        movedBlocks.add(particle);
     }
 
     public Block[][] getParticles() {
