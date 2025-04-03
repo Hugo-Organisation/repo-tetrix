@@ -114,12 +114,15 @@ public class GameController {
         double maxX = scene.getWidth() - squareRatio*particleSize;
         double minY = 0;
         double maxY = scene.getHeight() - squareRatio*particleSize;
-        if (model.checkCollision((int)newX/particleSize, (int)newY/particleSize)) {
+        if (model.checkCollision((int)square.getX()/particleSize, (int)newY/particleSize)) {
             model.createParticle((int)square.getX()/particleSize, (int)square.getY()/particleSize);
             square.setX(initialX);
             square.setY(0);
             vx = 0;
             return;
+        }
+        if (model.checkCollision((int)newX/particleSize, (int)square.getY()/particleSize)) {
+            newX = square.getX();
         }
         
         square.setY(Math.max(minY, Math.min(newY, maxY)));
