@@ -3,6 +3,7 @@ package controls;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import controls.tetromino.Square;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Scene;
@@ -13,7 +14,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import models.Block;
 import models.Game;
-import views.Square;
 
 public class GameController {
     private Square square;
