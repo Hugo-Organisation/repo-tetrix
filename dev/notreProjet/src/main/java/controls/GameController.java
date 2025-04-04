@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import controls.tetromino.Square;
+import controls.tetromino.Tetromino;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Scene;
@@ -16,15 +17,15 @@ import models.Block;
 import models.Game;
 
 public class GameController {
-    private Square square;
+    private Tetromino tetromino;
     private Pane root;
     private Scene scene;
     private Game model;
 
     private final int particleSize = 5;
-    private final int squareRatio = 20;
-    private final int widthRatio = 7;
-    private final int heightRatio = 7;
+    private final int squareRatio = 10;
+    private final int widthRatio = 14;
+    private final int heightRatio = 14;
 
     private final int width = widthRatio*squareRatio*particleSize;
     private final int height = widthRatio*squareRatio*particleSize;
@@ -39,11 +40,13 @@ public class GameController {
     }
 
     public void startGame(Stage primaryStage) {
-        square = new Square(squareRatio*particleSize, Color.BLACK);
-        square.setX(initialX);
-        root = new Pane(square);
+        root = new Pane();
         scene = new Scene(root, width, height);
         model = new Game(widthRatio*squareRatio, heightRatio*squareRatio,squareRatio);
+        
+        tetromino = new Tetromino(squareRatio*particleSize);
+        tetromino.addToRoot(root);
+        tetromino.setX(initialX,width,height);
 
         getCommand();
         updateFrame();
@@ -59,7 +62,7 @@ public class GameController {
     public void getCommand() {
         scene.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.UP) vy = 0;
-            if (event.getCode() == KeyCode.DOWN) vy = 2*v;
+            if (event.getCode() == KeyCode.DOWN) tetromino.rotation();
             if (event.getCode() == KeyCode.LEFT) vx = -v;
             if (event.getCode() == KeyCode.RIGHT) vx = v;
         });
@@ -107,26 +110,23 @@ public class GameController {
     }
 
     private void updateSquare() {
-        double newX = square.getX() + vx;
-        double newY = square.getY() + vy;
-        
-        double minX = 0;
-        double maxX = scene.getWidth() - squareRatio*particleSize;
-        double minY = 0;
-        double maxY = scene.getHeight() - squareRatio*particleSize;
-        if (model.checkCollision((int)square.getX()/particleSize, (int)newY/particleSize)) {
-            model.createParticle((int)square.getX()/particleSize, (int)square.getY()/particleSize);
-            square.setX(initialX);
-            square.setY(0);
+        double newX = tetromino.getX() + vx;
+        double newY = tetromino.getY() + vy;
+
+        if (tetromino.checkFormCollision(model,0,vy,particleSize)) {
+            tetromino.createParticleFromForm(model,particleSize);
+            tetromino.setX(initialX,width,height);
+            tetromino.setY(0,width,height);
+            tetromino.reset();
             vx = 0;
             return;
         }
-        if (model.checkCollision((int)newX/particleSize, (int)square.getY()/particleSize)) {
-            newX = square.getX();
+        if (tetromino.checkFormCollision(model,vx,0,particleSize)) {
+            newX = tetromino.getX();
         }
         
-        square.setY(Math.max(minY, Math.min(newY, maxY)));
-        square.setX(Math.max(minX, Math.min(newX, maxX)));
+        tetromino.setY(newY,width,height);
+        tetromino.setX(newX,width,height);
         model.animateParticles();
 
         addNewBlocks();
