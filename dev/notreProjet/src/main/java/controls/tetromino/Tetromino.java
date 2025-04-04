@@ -3,7 +3,7 @@ package controls.tetromino;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import models.Form;
-import models.Game;
+import models.SandArea;
 
 public class Tetromino {
     private final Square[] squares;
@@ -37,7 +37,7 @@ public class Tetromino {
         }
     }
 
-    public boolean checkFormCollision(Game model,double vx, double vy, int particleSize){
+    public boolean checkFormCollision(SandArea model,double vx, double vy, int particleSize){
         for(int k=0; k<4;k++){
             double X = squares[k].getX() + vx;
             double Y = squares[k].getY() + vy;
@@ -48,11 +48,11 @@ public class Tetromino {
         return false;
     }
 
-    public void createParticleFromForm(Game model, int particleSize){
+    public void createParticleFromForm(SandArea model, int particleSize){
         for(int k=0; k<4;k++){
             double X = squares[k].getX();
             double Y = squares[k].getY();
-            model.createParticle((int)X/particleSize, (int)Y/particleSize);
+            model.createBlock((int)X/particleSize, (int)Y/particleSize);
         }
     }
 

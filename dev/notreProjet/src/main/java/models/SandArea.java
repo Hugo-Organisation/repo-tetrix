@@ -5,11 +5,11 @@ import java.util.Random;
 
 import javafx.scene.paint.Color;
 
-public class Game {
+public class SandArea {
     private final int width;
     private final int height;
     private final int squareRatio;
-    private final Block[][] particles;
+    private final Block[][] blocks;
     private final ArrayList<Block> newBlocks;
     private final ArrayList<Block> deletedBlocks;
     private final ArrayList<Block> movedBlocks;
@@ -20,11 +20,11 @@ public class Game {
      * @param height Il s'agit de la hauteur de la scene en unité "particule"
      * @param squareRatio Il s'agit de la taille du carré qui tombe en continue en unité de particule
      */
-    public Game(int width, int height, int squareRatio) {
+    public SandArea(int width, int height, int squareRatio) {
         this.width = width;
         this.height = height;
         this.squareRatio = squareRatio;
-        this.particles = new Block[width][height];
+        this.blocks = new Block[width][height];
         newBlocks = new ArrayList<>();
         deletedBlocks = new ArrayList<>();
         movedBlocks = new ArrayList<>();
@@ -59,7 +59,7 @@ public class Game {
         for (int i = gridStartY; i <= gridEndY; i++) {
             for (int j = gridStartX; j <= gridEndX; j++) {
                 if (i >= 0 && i < width && j >= 0 && j < height) {
-                    if (particles[i][j] != null) return true;
+                    if (blocks[i][j] != null) return true;
                 }
             }
         }
@@ -71,12 +71,12 @@ public class Game {
      * @param x Il s'agit de la coordonné X du carré en unité "particule"
      * @param y Il s'agit de la coordonné Y du carré en unité "particule"
      */
-    public void createParticle(int x, int y) {
+    public void createBlock(int x, int y) {
         for (int i = 0; i < squareRatio; i++) {
             for (int j = 0; j < squareRatio; j++) {
-                Block particle = new Block(x + j, y + i, Color.RED);
-                particles[y + i][x + j] = particle;
-                newBlocks.add(particle);
+                Block block = new Block(x + j, y + i, Color.RED);
+                blocks[y + i][x + j] = block;
+                newBlocks.add(block);
             }
         }
     }
@@ -84,7 +84,7 @@ public class Game {
     /**
      * Cette fonction fait évoluer l'ensemble des particules d'une frame pour qu'elle respecte la physique choisit.
      */
-    public void animateParticles() {
+    public void animateBlocks() {
         Random random = new Random();
         for (int i = width - 1; i >= 0; i--) {
             //Le parcours de la cette boucle se fait soit dans le sens des j croissants soit dans le sens des j décroissant.
@@ -96,7 +96,7 @@ public class Game {
             int step = moveLeftOrRight < 0.5 ? 1 : -1;
             for (int j = start; j != end; j += step) {
             //fin de section
-                if (particles[i][j] != null) { // Test de la présence d'une particule
+                if (blocks[i][j] != null) { // Test de la présence d'une particule
                     //La section suivante sert à choisir si on tombe en priorité à droite ou à gauche lorsqu'on à le choix
                     //début de section
                     moveLeftOrRight = random.nextDouble();
@@ -114,19 +114,19 @@ public class Game {
                     //Si la particule peut tomber alors elle tombe.
                     //Mais elle à une probabilité de ce déplacer sur le coté (comme s'il y avait du vent).
                     //début de section
-                    if (i < width - 1 && particles[i + 1][j] == null) {
+                    if (i < width - 1 && blocks[i + 1][j] == null) {
                         double sideMoveProba = random.nextDouble();
                         double seuil = 0.2;
                         if(sideMoveProba<seuil){
-                            if(borderSideCondition1 && particles[i][j - 1*balanceLeftAndRight] == null){
-                                moveParticle(i, j, i, j - 1*balanceLeftAndRight);
+                            if(borderSideCondition1 && blocks[i][j - 1*balanceLeftAndRight] == null){
+                                moveBlock(i, j, i, j - 1*balanceLeftAndRight);
                             }
-                            else if(borderSideCondition2 && particles[i][j + 1*balanceLeftAndRight] == null){
-                                moveParticle(i, j, i, j + 1*balanceLeftAndRight);
+                            else if(borderSideCondition2 && blocks[i][j + 1*balanceLeftAndRight] == null){
+                                moveBlock(i, j, i, j + 1*balanceLeftAndRight);
                             }
                         }
                         else{
-                            moveParticle(i, j, i + 1, j);
+                            moveBlock(i, j, i + 1, j);
                         }
                     }
                     //fin de section
@@ -134,11 +134,11 @@ public class Game {
                     //Cette section gère les empillements de particule.
                     //Si un particule à un écart de plus de 1 unité de haut à gauche ou à droite alors elle tombe du coté en question
                     //début de section
-                    else if (borderSideCondition1 && i < width - 1 && particles[i + 1][j - 1*balanceLeftAndRight] == null && particles[i][j - 1*balanceLeftAndRight] == null) {
-                        moveParticle(i, j, i, j - 1*balanceLeftAndRight);
+                    else if (borderSideCondition1 && i < width - 1 && blocks[i + 1][j - 1*balanceLeftAndRight] == null && blocks[i][j - 1*balanceLeftAndRight] == null) {
+                        moveBlock(i, j, i, j - 1*balanceLeftAndRight);
                     }
-                    else if (borderSideCondition2 && i < width - 1 && particles[i + 1][j + 1*balanceLeftAndRight] == null && particles[i][j + 1*balanceLeftAndRight] == null) {
-                        moveParticle(i, j, i, j + 1*balanceLeftAndRight);
+                    else if (borderSideCondition2 && i < width - 1 && blocks[i + 1][j + 1*balanceLeftAndRight] == null && blocks[i][j + 1*balanceLeftAndRight] == null) {
+                        moveBlock(i, j, i, j + 1*balanceLeftAndRight);
                     }
                     //fin de section
                 }
@@ -154,11 +154,11 @@ public class Game {
      * @param newI Coordonné Y d'arrivé de la particule en unité de "particule"
      * @param newJ Coordonné X d'arrivé de la particule en unité de "particule"
      */
-    private void moveParticle(int oldI, int oldJ, int newI, int newJ) {
-        Block particle = particles[oldI][oldJ];
-        particles[oldI][oldJ] = null;
-        particles[newI][newJ] = particle;
-        particle.setXY(newJ,newI);
-        movedBlocks.add(particle);
+    private void moveBlock(int oldI, int oldJ, int newI, int newJ) {
+        Block block = blocks[oldI][oldJ];
+        blocks[oldI][oldJ] = null;
+        blocks[newI][newJ] = block;
+        block.setXY(newJ,newI);
+        movedBlocks.add(block);
     }
 }

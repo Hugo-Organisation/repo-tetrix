@@ -14,13 +14,13 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import models.Block;
-import models.Game;
+import models.SandArea;
 
 public class GameController {
     private Tetromino tetromino;
     private Pane root;
     private Scene scene;
-    private Game model;
+    private SandArea model;
 
     private final int particleSize = 5;
     private final int squareRatio = 10;
@@ -42,7 +42,7 @@ public class GameController {
     public void startGame(Stage primaryStage) {
         root = new Pane();
         scene = new Scene(root, width, height);
-        model = new Game(widthRatio*squareRatio, heightRatio*squareRatio,squareRatio);
+        model = new SandArea(widthRatio*squareRatio, heightRatio*squareRatio,squareRatio);
         
         tetromino = new Tetromino(squareRatio*particleSize);
         tetromino.addToRoot(root);
@@ -127,7 +127,7 @@ public class GameController {
         
         tetromino.setY(newY,width,height);
         tetromino.setX(newX,width,height);
-        model.animateParticles();
+        model.animateBlocks();
 
         addNewBlocks();
         removeDeletedBlocks();
