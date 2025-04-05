@@ -31,7 +31,7 @@ public class GameController {
     private final int height = widthRatio*squareRatio*particleSize;
     private final double initialX = (widthRatio/2)*squareRatio*particleSize;
     private final int v = particleSize;
-    private double vy = v;
+    private double vy = 0;
     private double vx = 0;
     private final int FPS = 60;
     private final HashMap<Block,Square> particles = new HashMap<>();
@@ -61,13 +61,14 @@ public class GameController {
 
     public void getCommand() {
         scene.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.UP) vy = 0;
-            if (event.getCode() == KeyCode.DOWN) tetromino.rotation();
+            if (event.getCode() == KeyCode.UP) vy = -v;
+            if (event.getCode() == KeyCode.DOWN) vy = v;
             if (event.getCode() == KeyCode.LEFT) vx = -v;
             if (event.getCode() == KeyCode.RIGHT) vx = v;
+            if (event.getCode() == KeyCode.SPACE) tetromino.rotation();
         });
         scene.setOnKeyReleased(event -> {
-            if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN) vy = v;
+            if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN) vy = 0;
             if (event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT) vx = 0;
         });
     }
@@ -113,17 +114,17 @@ public class GameController {
         double newX = tetromino.getX() + vx;
         double newY = tetromino.getY() + vy;
 
-        if (tetromino.checkFormCollision(model,0,vy,particleSize)) {
-            tetromino.createParticleFromForm(model,particleSize);
-            tetromino.setX(initialX,width,height);
-            tetromino.setY(0,width,height);
-            tetromino.reset();
-            vx = 0;
-            return;
-        }
-        if (tetromino.checkFormCollision(model,vx,0,particleSize)) {
-            newX = tetromino.getX();
-        }
+        // if (tetromino.checkFormCollision(model,0,vy,particleSize)) {
+        //     tetromino.createParticleFromForm(model,particleSize);
+        //     tetromino.setX(initialX,width,height);
+        //     tetromino.setY(0,width,height);
+        //     tetromino.reset();
+        //     vx = 0;
+        //     return;
+        // }
+        // if (tetromino.checkFormCollision(model,vx,0,particleSize)) {
+        //     newX = tetromino.getX();
+        // }
         
         tetromino.setY(newY,width,height);
         tetromino.setX(newX,width,height);

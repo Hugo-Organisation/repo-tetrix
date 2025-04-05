@@ -7,8 +7,10 @@ import javafx.scene.paint.Color;
 public class Form {
     private int[][] matrice;
     private Color color;
-    private int xSpace;
-    private int ySpace;
+    private int rightXSpace;
+    private int bottomYSpace;
+    private int leftXSpace;
+    private int topXSpace;
     
     private static final int[][][] FORMES_MATRICES = {
         // I
@@ -37,8 +39,10 @@ public class Form {
     private Form(int[][] matrice) {
         this.matrice = matrice;
         color = getCouleurAleatoire();
-        xSpace = calculateXSpace();
-        ySpace = calculateYSpace();
+        rightXSpace = calculateRightXSpace();
+        leftXSpace = calculateLeftXSpace();
+        topXSpace = calculateTopYSpace();
+        bottomYSpace = calculateBottomYSpace();
     }
 
     public static Form createForm(int type, Color couleur) {
@@ -58,9 +62,11 @@ public class Form {
         return COULEURS_POSSIBLES[new Random().nextInt(COULEURS_POSSIBLES.length)];
     }
     
-    private int calculateXSpace() {
+    private int calculateRightXSpace() {
         int maxCol = 0;
+        // Parcours toutes les lignes
         for (int[] ligne : matrice) {
+            // Trouve la dernière colonne non vide dans cette ligne
             for (int col = ligne.length - 1; col >= 0; col--) {
                 if (ligne[col] == 1) {
                     if (col + 1 > maxCol) {
@@ -71,11 +77,41 @@ public class Form {
             }
         }
         return maxCol;
+
+
+    }
+
+    private int calculateLeftXSpace() {
+        int emptyCols = 0;
+        boolean foundBlock;
+    
+        // Parcourt les colonnes de gauche à droite
+        for (int col = 0; col < matrice[0].length; col++) {
+            foundBlock = false;
+            
+            // Vérifie si la colonne contient au moins un bloc
+            for (int row = 0; row < matrice.length; row++) {
+                if (matrice[row][col] == 1) {
+                    foundBlock = true;
+                    break;
+                }
+            }
+            
+            if (!foundBlock) {
+                emptyCols++;
+            } else {
+                break; // On a trouvé la première colonne non vide
+            }
+        }
+        
+        return emptyCols;
     }
     
-    private int calculateYSpace() {
+    private int calculateBottomYSpace() {
         int maxRow = 0;
+        // Parcours toutes les lignes de haut en bas
         for (int row = matrice.length - 1; row >= 0; row--) {
+            // Vérifie si la ligne contient au moins un bloc
             for (int val : matrice[row]) {
                 if (val == 1) {
                     if (row + 1 > maxRow) {
@@ -86,6 +122,32 @@ public class Form {
             }
         }
         return maxRow;
+
+    }
+
+    private int calculateTopYSpace() {
+        int emptyRows = 0;
+    
+        // Parcourt les lignes du haut vers le bas
+        for (int row = 0; row < matrice.length; row++) {
+            boolean isEmpty = true;
+            
+            // Vérifie si la ligne contient au moins un bloc
+            for (int col = 0; col < matrice[row].length; col++) {
+                if (matrice[row][col] == 1) {
+                    isEmpty = false;
+                    break;
+                }
+            }
+            
+            if (isEmpty) {
+                emptyRows++;
+            } else {
+                break; // On a trouvé la première ligne non vide
+            }
+        }
+        
+        return emptyRows;
     }
     
     public void rotation() {
@@ -98,19 +160,29 @@ public class Form {
             }
         }
         matrice = nouvelleMatrice;
-        xSpace = calculateXSpace();
-        ySpace = calculateYSpace();
+        rightXSpace = calculateRightXSpace();
+        leftXSpace = calculateLeftXSpace();
+        topXSpace = calculateTopYSpace();
+        bottomYSpace = calculateBottomYSpace();
     }
 
     public int[][] getMatrice(){
         return matrice;
     }
 
-    public int getXSpace(){
-        return xSpace; 
+    public int getRightXSpace(){
+        return rightXSpace; 
     }
 
-    public int getYSpace(){
-        return ySpace;
+    public int getLeftXSpace(){
+        return leftXSpace;
+    }
+
+    public int getTopYSpace(){
+        return topXSpace;
+    }
+
+    public int getBottomYSpace(){
+        return bottomYSpace;
     }
 }

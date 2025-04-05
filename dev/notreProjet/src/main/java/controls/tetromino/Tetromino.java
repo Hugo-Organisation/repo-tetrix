@@ -70,15 +70,15 @@ public class Tetromino {
     }
 
     public void setX(double X, double width, double height){
-        double minX = 0;
-        double maxX = width - form.getXSpace()*squareSize;
+        double minX = 0 - form.getLeftXSpace()*squareSize;
+        double maxX = width - form.getRightXSpace()*squareSize;
         x = Math.max(minX, Math.min(X, maxX));
         updateSquarePosition();
     }
 
     public void setY(double Y,double width, double height){
-        double minY = 0;
-        double maxY = height - form.getYSpace()*squareSize;
+        double minY = 0 - form.getTopYSpace()*squareSize;
+        double maxY = height - form.getBottomYSpace()*squareSize;
         y = Math.max(minY, Math.min(Y, maxY));
         updateSquarePosition();
     }
