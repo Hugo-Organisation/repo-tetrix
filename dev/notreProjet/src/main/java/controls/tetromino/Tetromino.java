@@ -1,5 +1,7 @@
 package controls.tetromino;
 
+import java.util.Random;
+
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import models.Form;
@@ -8,9 +10,26 @@ import models.SandArea;
 public class Tetromino {
     private final Square[] squares;
     private Form form;
-    private Color couleur;
+    public Color current_couleur = COULEURS_POSSIBLES[new Random().nextInt(COULEURS_POSSIBLES.length)];
+    public Color previous_couleur = null;
     private double x,y;
     private final int squareSize;
+
+    private static final Color[] COULEURS_POSSIBLES = {
+        Color.CYAN, Color.BLUE, Color.ORANGE, 
+        Color.YELLOW, Color.GREEN, Color.MAGENTA, 
+        Color.RED, Color.PINK, Color.WHITE,
+        Color.PURPLE, Color.LIME, Color.TEAL
+    };
+
+    public void changeColor() {
+        Color new_color = COULEURS_POSSIBLES[new Random().nextInt(COULEURS_POSSIBLES.length)];
+        this.previous_couleur = current_couleur;
+        this.current_couleur = new_color;
+        for(int i = 0; i<4; i++){
+            squares[i].setFill(new_color);
+        }
+    }
     
     public Tetromino(int squareSize){
         this.squareSize= squareSize;
@@ -18,7 +37,7 @@ public class Tetromino {
         y = 0;
         squares = new Square[4];
         for(int i = 0; i<4; i++){
-            squares[i] = new Square(squareSize, Color.BLACK);
+            squares[i] = new Square(squareSize, current_couleur);
         }
         form = Form.getFormeAleatoire(squareSize);
     }

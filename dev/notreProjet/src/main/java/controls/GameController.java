@@ -10,7 +10,6 @@ import javafx.animation.Timeline;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import models.Block;
@@ -77,7 +76,7 @@ public class GameController {
         ArrayList<Block> list = model.getNewBlocks();
         ArrayList<Block> toDelete = new ArrayList<>();
         for(Block block : list){
-            Square particle = new Square(v, Color.RED);
+            Square particle = new Square(v, tetromino.previous_couleur);
             particle.setX(block.getX()*v);
             particle.setY(block.getY()*v);
             particles.put(block, particle);
@@ -118,6 +117,7 @@ public class GameController {
              tetromino.createParticleFromForm(model,particleSize);
              tetromino.setX(initialX,width,height);
              tetromino.setY(0,width,height);
+             tetromino.changeColor();
              tetromino.reset();
              vx = 0;
              return;

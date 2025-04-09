@@ -2,11 +2,8 @@ package models;
 
 import java.util.Random;
 
-import javafx.scene.paint.Color;
-
 public class Form {
     private int[][] matrice;
-    private Color color;
     private int rightXSpace;
     private int bottomYSpace;
     private int leftXSpace;
@@ -28,24 +25,16 @@ public class Form {
         // Z
         {{1,1,0}, {0,1,1}, {0,0,0}}
     };
-
-    private static final Color[] COULEURS_POSSIBLES = {
-        Color.CYAN, Color.BLUE, Color.ORANGE, 
-        Color.YELLOW, Color.GREEN, Color.MAGENTA, 
-        Color.RED, Color.PINK, Color.WHITE,
-        Color.PURPLE, Color.LIME, Color.TEAL
-    };
     
     private Form(int[][] matrice) {
         this.matrice = matrice;
-        color = getCouleurAleatoire();
         rightXSpace = calculateRightXSpace();
         leftXSpace = calculateLeftXSpace();
         topXSpace = calculateTopYSpace();
         bottomYSpace = calculateBottomYSpace();
     }
 
-    public static Form createForm(int type, Color couleur) {
+    public static Form createForm(int type) {
         if (type < 0 || type >= FORMES_MATRICES.length) {
             throw new IllegalArgumentException("Type de forme invalide: " + type);
         }
@@ -55,12 +44,9 @@ public class Form {
     
     public static Form getFormeAleatoire(int blockSize) {
         int type = new Random().nextInt(FORMES_MATRICES.length);
-        return createForm(type,getCouleurAleatoire());
+        return createForm(type);
     }
-    
-    public static Color getCouleurAleatoire() {
-        return COULEURS_POSSIBLES[new Random().nextInt(COULEURS_POSSIBLES.length)];
-    }
+
     
     private int calculateRightXSpace() {
         int maxCol = 0;
