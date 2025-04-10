@@ -16,10 +16,10 @@ public class Tetromino {
     private final int squareSize;
 
     private static final Color[] COULEURS_POSSIBLES = {
-        Color.CYAN, Color.BLUE, Color.ORANGE, 
-        Color.YELLOW, Color.GREEN, Color.MAGENTA, 
-        Color.RED, Color.PINK, Color.WHITE,
-        Color.PURPLE, Color.LIME, Color.TEAL
+        Color.CYAN, Color.BLUE, //Color.ORANGE, 
+        //Color.YELLOW, Color.GREEN, Color.MAGENTA, 
+        //Color.RED, Color.PINK, Color.WHITE,
+        //Color.PURPLE, Color.LIME, Color.TEAL
     };
 
     public void changeColor() {
@@ -71,7 +71,7 @@ public class Tetromino {
         for(int k=0; k<4;k++){
             double X = squares[k].getX();
             double Y = squares[k].getY();
-            model.createBlock((int)X/particleSize, (int)Y/particleSize);
+            model.createBlock((int)X/particleSize, (int)Y/particleSize, current_couleur);
         }
     }
 

@@ -3,6 +3,8 @@ package models;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javafx.scene.paint.Color;
+
 public class SandArea {
     private final int width;
     private final int height;
@@ -69,10 +71,10 @@ public class SandArea {
      * @param x Il s'agit de la coordonné X du carré en unité "particule"
      * @param y Il s'agit de la coordonné Y du carré en unité "particule"
      */
-    public void createBlock(int x, int y) {
+    public void createBlock(int x, int y, Color current_couleur) {
         for (int i = 0; i < squareRatio; i++) {
             for (int j = 0; j < squareRatio; j++) {
-                Block block = new Block(x + j, y + i);
+                Block block = new Block(x + j, y + i, current_couleur);
                 blocks[y + i][x + j] = block;
                 newBlocks.add(block);
             }
