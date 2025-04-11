@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
@@ -41,6 +42,8 @@ public class GameController {
     private double vx = 0;
     private final int FPS = 60;
     private final HashMap<Block,Square> particles = new HashMap<>();
+    private final Map<String, Block> positionToBlock = new HashMap<>();
+
 
     public GameController() {
     }
@@ -87,6 +90,7 @@ public class GameController {
             particle.setX(block.getX()*v);
             particle.setY(block.getY()*v);
             particles.put(block, particle);
+            positionToBlock.put(block.getX() + "," + block.getY(), block);
             root.getChildren().add(particle);
             toDelete.add(block);
         }
@@ -116,89 +120,55 @@ public class GameController {
         }
     }
 
-    private List<Block> getAdjacentSameColorBlocks(Block block, Color color, Set<Block> particles) {
-        List<Block> neighbors = new ArrayList<>();
-        int x = (int) block.getX();
-        int y = (int) block.getY();
     
-        int[][] directions = {
-            {-1, 0}, {1, 0}, {0, -1}, {0, 1}
-        };
-    
-        for (int[] direction : directions) {
-            int nx = x + direction[0];
-            int ny = y + direction[1];
-            Block neighbor = new Block(nx, ny, color);
-    
-            // Vérification si le voisin existe dans particles
-            if (particles.contains(neighbor)) {
-                neighbors.add(neighbor);
-            }
-        }
-    
-        return neighbors;
-    }
-    
-    private void checkIfWeShouldDeleteColor() {
+    private void findCluster() {
         Set<Block> visited = new HashSet<>();
-        Set<Block> blocksToDelete = new HashSet<>();
-        
-        int minX = 0; // bord gauche
-        int maxX = width - 1; // bord droit
+        List<List<Block>> allClusters = new ArrayList<>();
     
-        Set<Block> particleKeys = new HashSet<>(particles.keySet());
+        // Étape 1 : trouver tous les clusters
+        for (Block start : particles.keySet()) {
+            if (visited.contains(start)) continue;
     
-        for (Block block : particles.keySet()) {
-            if (visited.contains(block)) continue;
-    
-            Color color = block.getColor();
+            Color color = start.getColor();
             List<Block> cluster = new ArrayList<>();
-        
-            boolean touchesLeft = false;
-            boolean touchesRight = false;
-        
-            // BFS
+    
             Queue<Block> queue = new LinkedList<>();
-            queue.add(block);
-            visited.add(block);
-        
+            queue.add(start);
+            visited.add(start);
+    
             while (!queue.isEmpty()) {
                 Block current = queue.poll();
                 cluster.add(current);
-        
-                if (current.getX() <= minX) {
-                    touchesLeft = true;
-                }
-                if (current.getX() >= maxX) {
-                    touchesRight = true;
-                }
-
-                for (Block neighbor : getAdjacentSameColorBlocks(current, color, particleKeys)) {
-                    if (!visited.contains(neighbor)) {
-                        visited.add(neighbor);
+    
+                int x = current.getX();
+                int y = current.getY();
+    
+                int[][] directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+                for (int[] dir : directions) {
+                    int nx = x + dir[0];
+                    int ny = y + dir[1];
+                    String key = nx + "," + ny;
+    
+                    Block neighbor = positionToBlock.get(key);
+                    if (neighbor != null && !visited.contains(neighbor) && neighbor.getColor().equals(color)) {
                         queue.add(neighbor);
+                        visited.add(neighbor);
                     }
                 }
             }
-        
-            // Si le cluster touche à la fois le bord gauche et droit
-            if (touchesLeft && touchesRight) {
-                blocksToDelete.addAll(cluster);
-            }
-        }
-        
-        // Supprimer les blocs
-        for (Block block : blocksToDelete) {
-            System.out.println("Suppression de la particule à (" + block.getX() + ", " + block.getY() + ") avec couleur " + block.getColor());
+
+            System.out.println(cluster.size());
+    
+            allClusters.add(cluster);
         }
     }
     
-    
+
 
 
     private void updateSquare() {
 
-        checkIfWeShouldDeleteColor();
+        findCluster();
 
         double newX = tetromino.getX() + vx;
         double newY = tetromino.getY() + vy;
