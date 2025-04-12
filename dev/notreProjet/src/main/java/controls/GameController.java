@@ -24,11 +24,11 @@ public class GameController {
 
     private final int particleSize = 5;
     private final int squareRatio = 10;
-    private final int widthRatio = 14;
+    private final int widthRatio = 10;
     private final int heightRatio = 14;
 
     private final int width = widthRatio*squareRatio*particleSize;
-    private final int height = widthRatio*squareRatio*particleSize;
+    private final int height = heightRatio*squareRatio*particleSize;
     private final double initialX = (widthRatio/2)*squareRatio*particleSize;
     private final int v = particleSize;
     private double vy = v;

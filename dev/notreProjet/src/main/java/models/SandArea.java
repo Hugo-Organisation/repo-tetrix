@@ -29,7 +29,7 @@ public class SandArea {
         this.width = width;
         this.height = height;
         this.squareRatio = squareRatio;
-        this.blocks = new Block[width][height];
+        this.blocks = new Block[height][width];
         newBlocks = new ArrayList<>();
         deletedBlocks = new ArrayList<>();
         movedBlocks = new ArrayList<>();
@@ -63,7 +63,7 @@ public class SandArea {
 
         for (int i = gridStartY; i <= gridEndY; i++) {
             for (int j = gridStartX; j <= gridEndX; j++) {
-                if (i >= 0 && i < width && j >= 0 && j < height) {
+                if (i >= 0 && i < height && j >= 0 && j < width) {
                     if (blocks[i][j] != null) return true;
                 }
             }
@@ -182,13 +182,13 @@ public class SandArea {
      */
     public void animateBlocks() {
         Random random = new Random();
-        for (int i = width - 1; i >= 0; i--) {
+        for (int i = height - 1; i >= 0; i--) {
             //Le parcours de la cette boucle se fait soit dans le sens des j croissants soit dans le sens des j décroissant.
             //C'est à ça que sert cette section.
             //début de section
             double moveLeftOrRight = random.nextDouble();
-            int start = moveLeftOrRight < 0.5 ? 0 : height - 1;
-            int end = moveLeftOrRight < 0.5 ? height : -1;
+            int start = moveLeftOrRight < 0.5 ? 0 : width - 1;
+            int end = moveLeftOrRight < 0.5 ? width : -1;
             int step = moveLeftOrRight < 0.5 ? 1 : -1;
             for (int j = start; j != end; j += step) {
             //fin de section
@@ -197,12 +197,12 @@ public class SandArea {
                     //début de section
                     moveLeftOrRight = random.nextDouble();
                     int balanceLeftAndRight = -1;
-                    boolean borderSideCondition1 = j < height - 1;
+                    boolean borderSideCondition1 = j < width - 1;
                     boolean borderSideCondition2 = j > 0;
                     if(moveLeftOrRight<0.5){ 
                         balanceLeftAndRight = 1;
                         borderSideCondition1 = j > 0;
-                        borderSideCondition2 = j < height - 1;
+                        borderSideCondition2 = j < width - 1;
                     }
                     //fin de section
 
@@ -210,7 +210,7 @@ public class SandArea {
                     //Si la particule peut tomber alors elle tombe.
                     //Mais elle à une probabilité de ce déplacer sur le coté (comme s'il y avait du vent).
                     //début de section
-                    if (i < width - 1 && blocks[i + 1][j] == null) {
+                    if (i < height - 1 && blocks[i + 1][j] == null) {
                         double sideMoveProba = random.nextDouble();
                         double seuil = 0.2;
                         if(sideMoveProba<seuil){
@@ -230,10 +230,10 @@ public class SandArea {
                     //Cette section gère les empillements de particule.
                     //Si un particule à un écart de plus de 1 unité de haut à gauche ou à droite alors elle tombe du coté en question
                     //début de section
-                    else if (borderSideCondition1 && i < width - 1 && blocks[i + 1][j - 1*balanceLeftAndRight] == null && blocks[i][j - 1*balanceLeftAndRight] == null) {
+                    else if (borderSideCondition1 && i < height - 1 && blocks[i + 1][j - 1*balanceLeftAndRight] == null && blocks[i][j - 1*balanceLeftAndRight] == null) {
                         moveBlock(i, j, i, j - 1*balanceLeftAndRight);
                     }
-                    else if (borderSideCondition2 && i < width - 1 && blocks[i + 1][j + 1*balanceLeftAndRight] == null && blocks[i][j + 1*balanceLeftAndRight] == null) {
+                    else if (borderSideCondition2 && i < height - 1 && blocks[i + 1][j + 1*balanceLeftAndRight] == null && blocks[i][j + 1*balanceLeftAndRight] == null) {
                         moveBlock(i, j, i, j + 1*balanceLeftAndRight);
                     }
                     //fin de section
