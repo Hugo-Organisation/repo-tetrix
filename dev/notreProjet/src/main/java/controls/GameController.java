@@ -1,5 +1,6 @@
 package controls;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -7,6 +8,8 @@ import controls.tetromino.Square;
 import controls.tetromino.Tetromino;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
@@ -17,6 +20,9 @@ import models.SandArea;
 
 
 public class GameController {
+    private Timeline timeline;
+    private Parent pauseMenu;
+
     private Tetromino tetromino;
     private Pane root;
     private Scene scene;
@@ -68,6 +74,16 @@ public class GameController {
             if (event.getCode() == KeyCode.LEFT) vx = -v;
             if (event.getCode() == KeyCode.RIGHT) vx = v;
             if (event.getCode() == KeyCode.SPACE) tetromino.rotation();
+            if (event.getCode() == KeyCode.ESCAPE){
+                timeline.pause();
+                try{
+                    pauseMenu = FXMLLoader.load(getClass().getResource("/fxml/PauseMenuView.fxml"));
+                    root.getChildren().add(pauseMenu);
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         });
         scene.setOnKeyReleased(event -> {
             if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN) vy = v;
@@ -152,7 +168,7 @@ public class GameController {
     }
 
     public void updateFrame() {
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000.0 / FPS), event -> {updateSquare();}));
+        timeline = new Timeline(new KeyFrame(Duration.millis(1000.0 / FPS), event -> {updateSquare();}));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
     }
