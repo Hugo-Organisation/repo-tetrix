@@ -9,10 +9,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class PauseMenuCtrl {
+
+    @FXML
+    private VBox root;
 
     @FXML
     private Button quitButton;
@@ -51,6 +55,10 @@ public class PauseMenuCtrl {
 
     public void setResumeButton(Runnable action) {
         resumeButton.setOnAction(e -> action.run());
+    }
+
+    public double getHeight(){
+        return root.getPrefHeight();
     }
 
 }

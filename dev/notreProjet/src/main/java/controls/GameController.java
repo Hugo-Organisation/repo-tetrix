@@ -23,6 +23,7 @@ import views.PauseMenuCtrl;
 public class GameController {
     private Timeline timeline;
     private Parent pauseMenu;
+    private boolean pauseToggle = false;
 
     private Tetromino tetromino;
     private Pane root;
@@ -76,20 +77,30 @@ public class GameController {
             if (event.getCode() == KeyCode.RIGHT) vx = v;
             if (event.getCode() == KeyCode.SPACE) tetromino.rotation();
             if (event.getCode() == KeyCode.ESCAPE){
-                timeline.pause();
-                try{
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/PauseMenuView.fxml"));
-                    pauseMenu = loader.load();
-                    root.getChildren().add(pauseMenu);
-                    PauseMenuCtrl controller = loader.getController();
-                    controller.setResumeButton(() -> {
-                        timeline.play();
-                        root.getChildren().remove(pauseMenu);
-                    });
+                if(pauseToggle){
+                    timeline.play();
+                    root.getChildren().remove(pauseMenu);
                 }
-                catch (IOException e) {
-                    e.printStackTrace();
+                else{
+                    timeline.pause();
+                    try{
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/PauseMenuView.fxml"));
+                        pauseMenu = loader.load();                    
+                        
+                        root.getChildren().add(pauseMenu);
+                        PauseMenuCtrl controller = loader.getController();
+                        pauseMenu.setLayoutY(height / 2 - controller.getHeight()/2);
+                        controller.setResumeButton(() -> {
+                            timeline.play();
+                            root.getChildren().remove(pauseMenu);
+                        });
+                    }
+                    catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
+                pauseToggle = !pauseToggle;
+
             }
         });
         scene.setOnKeyReleased(event -> {
