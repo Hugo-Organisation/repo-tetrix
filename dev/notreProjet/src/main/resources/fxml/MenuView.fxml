@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:controller="views.MenuViewCtrl" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Button fx:id="aboutButton" layoutX="395.0" layoutY="299.0" mnemonicParsing="false" onMouseClicked="#onClic" prefHeight="70.0" prefWidth="130.0" text="ABOUT" />
+      <Button fx:id="startButton" layoutX="235.0" layoutY="299.0" mnemonicParsing="false" onMouseClicked="#onClic" prefHeight="70.0" prefWidth="130.0" text="START" />
+      <Text fx:id="Title" layoutX="205.0" layoutY="219.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SANDTRIS" textAlignment="CENTER">
+         <font>
+            <Font size="40.0" />
+         </font>
+      </Text>
+      <Button fx:id="leaderboardButton" layoutX="75.0" layoutY="299.0" mnemonicParsing="false" onMouseClicked="#onClic" prefHeight="70.0" prefWidth="130.0" text="LEADERBOARD" />
+      <Slider fx:id="MusicSlider" layoutX="230.0" layoutY="550.0" />
+      <Text fx:id="MusicTitle" layoutX="268.0" layoutY="519.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MUSIC">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+   </children>
+</AnchorPane>

@@ -1,11 +1,13 @@
 package views;
 
+import controls.GameController;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -31,7 +33,13 @@ public class MenuViewCtrl implements javafx.fxml.Initializable {
     private Button startButton;
 
     @FXML
-    void Onclic(MouseEvent event) {
+    void onClic(MouseEvent event) {
+        if (event.getSource().equals(startButton)) {
+            Stage stage = (Stage) startButton.getScene().getWindow();
+
+            GameController controller = new GameController();
+            controller.startGame(stage);
+        }
 
     }
 

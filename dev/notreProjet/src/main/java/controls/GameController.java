@@ -40,6 +40,7 @@ public class GameController {
     }
 
     public void startGame(Stage primaryStage) {
+        System.out.println("Game started");
         root = new Pane();
         scene = new Scene(root, width, height);
         model = new SandArea(widthRatio*squareRatio, heightRatio*squareRatio,squareRatio);
