@@ -1,7 +1,12 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 import java.util.Random;
+import java.util.Set;
 
 import javafx.scene.paint.Color;
 
@@ -9,7 +14,7 @@ public class SandArea {
     private final int width;
     private final int height;
     private final int squareRatio;
-    private final Block[][] blocks;
+    private Block[][] blocks;
     private final ArrayList<Block> newBlocks;
     private final ArrayList<Block> deletedBlocks;
     private final ArrayList<Block> movedBlocks;
@@ -71,15 +76,106 @@ public class SandArea {
      * @param x Il s'agit de la coordonné X du carré en unité "particule"
      * @param y Il s'agit de la coordonné Y du carré en unité "particule"
      */
-    public void createBlock(int x, int y) {
+    public void createBlock(int x, int y, Color current_couleur) {
         for (int i = 0; i < squareRatio; i++) {
             for (int j = 0; j < squareRatio; j++) {
-                Block block = new Block(x + j, y + i, Color.RED);
+                Block block = new Block(x + j, y + i, current_couleur);
                 blocks[y + i][x + j] = block;
                 newBlocks.add(block);
             }
         }
     }
+
+    private List<List<Block>> findCluster() {
+        Set<Block> visited = new HashSet<>();
+        List<List<Block>> allClusters = new ArrayList<>();
+    
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+    
+                Block current_block = blocks[y][x];
+                if (current_block == null || visited.contains(current_block)) continue;
+    
+                Color color = current_block.getColor();
+                List<Block> cluster = new ArrayList<>();
+    
+                Queue<Block> queue = new LinkedList<>();
+                queue.add(current_block);
+                visited.add(current_block);
+    
+                while (!queue.isEmpty()) {
+                    Block current = queue.poll();
+                    cluster.add(current);
+    
+                    int cx = current.getX();
+                    int cy = current.getY();
+    
+                    int[][] directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+                    for (int[] dir : directions) {
+                        int nx = cx + dir[0];
+                        int ny = cy + dir[1];
+    
+                        if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+                            Block neighbor = blocks[ny][nx];
+                            if (neighbor != null && !visited.contains(neighbor) && neighbor.getColor().equals(color)) {
+                                queue.add(neighbor);
+                                visited.add(neighbor);
+                            }
+                        }
+                    }
+                }
+                allClusters.add(cluster);
+            }
+        }
+
+        return allClusters;
+    }
+
+    private List<List<Block>> findClusterToDelete() {
+        List<List<Block>> allClusters = findCluster();
+        List<List<Block>> clusterToDelete = new ArrayList<>();
+        for (int i = 0; i < allClusters.size(); i ++) {
+            boolean touch_left = false;
+            boolean touch_right = false;
+            for (int j = 0; j < allClusters.get(i).size(); j ++) {
+                int x_position = allClusters.get(i).get(j).getX();
+                if (x_position <= 0) {
+                    touch_left = true;
+                }
+                if (x_position >= width-1) {
+                    touch_right = true;
+                }
+            }
+            if (touch_left && touch_right) {
+                clusterToDelete.add(allClusters.get(i));
+            }
+        }
+
+        for (int i = 0; i < clusterToDelete.size(); i ++) {
+            System.out.println(clusterToDelete.get(i).size());
+        }
+
+        return clusterToDelete;
+
+    }
+
+    public void removeBlocksToDelete() {
+        List<List<Block>> clusterToDelete = findClusterToDelete();
+
+        
+        for (int i = 0; i < clusterToDelete.size(); i ++) {
+            for (int j = 0; j < clusterToDelete.get(i).size(); j ++) {
+                deletedBlocks.add(clusterToDelete.get(i).get(j));
+            }
+        }
+        
+        for (List<Block> cluster : clusterToDelete) {
+            for (Block b : cluster) {
+                blocks[b.getY()][b.getX()] = null;
+            }
+        }
+    }
+    
 
     /**
      * Cette fonction fait évoluer l'ensemble des particules d'une frame pour qu'elle respecte la physique choisit.

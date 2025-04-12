@@ -2,16 +2,15 @@ package models;
 
 import javafx.scene.paint.Color;
 
-
 public class Block {
-    private Color color;
     private int x;
     private int y;
+    private Color color;
 
-    public Block(int X, int Y, Color C){
+    public Block(int X, int Y, Color current_couleur){
         x = X;
         y = Y;
-        color = C;
+        this.color = current_couleur;
     }
 
     public int getX(){
@@ -20,6 +19,10 @@ public class Block {
 
     public int getY(){
         return y;
+    }
+
+    public Color getColor(){
+        return color;
     }
 
     public void setX(int X){

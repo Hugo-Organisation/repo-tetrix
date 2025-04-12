@@ -10,11 +10,11 @@ import javafx.animation.Timeline;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import models.Block;
 import models.SandArea;
+
 
 public class GameController {
     private Tetromino tetromino;
@@ -35,6 +35,7 @@ public class GameController {
     private double vx = 0;
     private final int FPS = 60;
     private final HashMap<Block,Square> particles = new HashMap<>();
+
 
     public GameController() {
     }
@@ -78,7 +79,7 @@ public class GameController {
         ArrayList<Block> list = model.getNewBlocks();
         ArrayList<Block> toDelete = new ArrayList<>();
         for(Block block : list){
-            Square particle = new Square(v, Color.RED);
+            Square particle = new Square(v, tetromino.previous_couleur);
             particle.setX(block.getX()*v);
             particle.setY(block.getY()*v);
             particles.put(block, particle);
@@ -91,9 +92,11 @@ public class GameController {
     }
 
     private void removeDeletedBlocks(){
-        ArrayList<Block> list = model.getNewBlocks();
+        ArrayList<Block> list = model.getDeletedBlocks();
         ArrayList<Block> toDelete = new ArrayList<>();
         for(Block block : list){
+            Square particle = particles.get(block);
+            root.getChildren().remove(particle);
             particles.remove(block);
             toDelete.add(block);
         }
@@ -104,14 +107,23 @@ public class GameController {
 
     private void updateParticles(){
         ArrayList<Block> list = model.getMovedBlocks();
+        ArrayList<Block> toDelete = new ArrayList<>();
         for(Block block : list){
             Square particle = particles.get(block);
-            particle.setX(block.getX()*v);
-            particle.setY(block.getY()*v);
+            if(particle != null){
+                particle.setX(block.getX()*v);
+                particle.setY(block.getY()*v);
+            }
+            toDelete.add(block);
+        }
+        for(Block block : toDelete){
+            list.remove(block);
         }
     }
 
+
     private void updateSquare() {
+
         double newX = tetromino.getX() + vx;
         double newY = tetromino.getY() + vy;
 
@@ -119,6 +131,7 @@ public class GameController {
              tetromino.createParticleFromForm(model,particleSize);
              tetromino.setX(initialX,width,height);
              tetromino.setY(0,width,height);
+             tetromino.changeColor();
              tetromino.reset();
              vx = 0;
              return;
@@ -129,11 +142,13 @@ public class GameController {
 
         tetromino.setY(newY,width,height);
         tetromino.setX(newX,width,height);
-        model.animateBlocks();
 
+        model.animateBlocks();
         addNewBlocks();
-        removeDeletedBlocks();
         updateParticles();
+
+        model.removeBlocksToDelete();
+        removeDeletedBlocks();
     }
 
     public void updateFrame() {
