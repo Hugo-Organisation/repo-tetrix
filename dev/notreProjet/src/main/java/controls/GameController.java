@@ -2,12 +2,6 @@ package controls;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
 
 import controls.tetromino.Square;
 import controls.tetromino.Tetromino;
@@ -16,7 +10,6 @@ import javafx.animation.Timeline;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import models.Block;
@@ -42,7 +35,6 @@ public class GameController {
     private double vx = 0;
     private final int FPS = 60;
     private final HashMap<Block,Square> particles = new HashMap<>();
-    private final Map<String, Block> positionToBlock = new HashMap<>();
 
 
     public GameController() {
@@ -90,7 +82,6 @@ public class GameController {
             particle.setX(block.getX()*v);
             particle.setY(block.getY()*v);
             particles.put(block, particle);
-            positionToBlock.put(block.getX() + "," + block.getY(), block);
             root.getChildren().add(particle);
             toDelete.add(block);
         }
@@ -120,55 +111,8 @@ public class GameController {
         }
     }
 
-    
-    private void findCluster() {
-        Set<Block> visited = new HashSet<>();
-        List<List<Block>> allClusters = new ArrayList<>();
-    
-        // Étape 1 : trouver tous les clusters
-        for (Block start : particles.keySet()) {
-            if (visited.contains(start)) continue;
-    
-            Color color = start.getColor();
-            List<Block> cluster = new ArrayList<>();
-    
-            Queue<Block> queue = new LinkedList<>();
-            queue.add(start);
-            visited.add(start);
-    
-            while (!queue.isEmpty()) {
-                Block current = queue.poll();
-                cluster.add(current);
-    
-                int x = current.getX();
-                int y = current.getY();
-    
-                int[][] directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
-                for (int[] dir : directions) {
-                    int nx = x + dir[0];
-                    int ny = y + dir[1];
-                    String key = nx + "," + ny;
-    
-                    Block neighbor = positionToBlock.get(key);
-                    if (neighbor != null && !visited.contains(neighbor) && neighbor.getColor().equals(color)) {
-                        queue.add(neighbor);
-                        visited.add(neighbor);
-                    }
-                }
-            }
-
-            System.out.println(cluster.size());
-    
-            allClusters.add(cluster);
-        }
-    }
-    
-
-
 
     private void updateSquare() {
-
-        findCluster();
 
         double newX = tetromino.getX() + vx;
         double newY = tetromino.getY() + vy;
@@ -189,6 +133,7 @@ public class GameController {
         tetromino.setY(newY,width,height);
         tetromino.setX(newX,width,height);
         model.animateBlocks();
+        model.removeBlocksToDelete();
 
         addNewBlocks();
         removeDeletedBlocks();
