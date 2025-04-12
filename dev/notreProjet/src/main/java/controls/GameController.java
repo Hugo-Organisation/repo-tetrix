@@ -94,7 +94,8 @@ public class GameController {
         ArrayList<Block> list = model.getDeletedBlocks();
         ArrayList<Block> toDelete = new ArrayList<>();
         for(Block block : list){
-            root.getChildren().remove(particles.get(block));
+            Square particle = particles.get(block);
+            root.getChildren().remove(particle);
             particles.remove(block);
             toDelete.add(block);
         }
@@ -105,10 +106,17 @@ public class GameController {
 
     private void updateParticles(){
         ArrayList<Block> list = model.getMovedBlocks();
+        ArrayList<Block> toDelete = new ArrayList<>();
         for(Block block : list){
             Square particle = particles.get(block);
-            particle.setX(block.getX()*v);
-            particle.setY(block.getY()*v);
+            if(particle != null){
+                particle.setX(block.getX()*v);
+                particle.setY(block.getY()*v);
+            }
+            toDelete.add(block);
+        }
+        for(Block block : toDelete){
+            list.remove(block);
         }
     }
 
@@ -133,12 +141,13 @@ public class GameController {
 
         tetromino.setY(newY,width,height);
         tetromino.setX(newX,width,height);
-        model.animateBlocks();
-        model.removeBlocksToDelete();
 
+        model.animateBlocks();
         addNewBlocks();
-        removeDeletedBlocks();
         updateParticles();
+
+        model.removeBlocksToDelete();
+        removeDeletedBlocks();
     }
 
     public void updateFrame() {
