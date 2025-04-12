@@ -94,6 +94,7 @@ public class GameController {
         ArrayList<Block> list = model.getNewBlocks();
         ArrayList<Block> toDelete = new ArrayList<>();
         for(Block block : list){
+            root.getChildren().remove(particles.get(block));
             particles.remove(block);
             toDelete.add(block);
         }
