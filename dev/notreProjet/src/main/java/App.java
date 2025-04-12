@@ -11,10 +11,10 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        Font.loadFont(getClass().getResourceAsStream("/fonts/LLPIXEL3.ttf"), 14);
+        
         Parent root;
-
         try {
-            Font.loadFont(getClass().getResourceAsStream("/fonts/LLPIXEL3.ttf"), 14);
             root = FXMLLoader.load(getClass().getResource("/fxml/MenuView.fxml"));
 
             Scene menuScene = new Scene(root);
