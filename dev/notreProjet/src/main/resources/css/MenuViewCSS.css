@@ -14,6 +14,7 @@ Button {
     -fx-pref-width: 160px;
     -fx-pref-height: 70px;
     -fx-font-size: 20px; 
+    -fx-text-fill: #fcebb3;
     -fx-background-color: rgba(34, 28, 26, 0.8);
     -fx-border-color: #c9af98;
     -fx-border-width: 2px;
