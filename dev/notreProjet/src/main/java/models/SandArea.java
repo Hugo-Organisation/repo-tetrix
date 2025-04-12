@@ -14,7 +14,7 @@ public class SandArea {
     private final int width;
     private final int height;
     private final int squareRatio;
-    private final Block[][] blocks;
+    private Block[][] blocks;
     private final ArrayList<Block> newBlocks;
     private final ArrayList<Block> deletedBlocks;
     private final ArrayList<Block> movedBlocks;
@@ -154,12 +154,37 @@ public class SandArea {
         for (int i = 0; i < clusterToDelete.size(); i ++) {
             System.out.println(clusterToDelete.get(i).size());
         }
+
         return clusterToDelete;
 
     }
 
     public void removeBlocksToDelete() {
         List<List<Block>> clusterToDelete = findClusterToDelete();
+
+        // copy la matrice block
+        Block[][] copy_blocks = new Block[blocks.length][blocks[0].length];
+        for (int i = 0; i < copy_blocks.length; i ++) {
+            for (int j = 0; j < copy_blocks[i].length; j++) {
+                Block original = blocks[i][j];
+                copy_blocks[i][j] = original; 
+            }
+        }
+        
+        for (int i = 0; i < clusterToDelete.size(); i ++) {
+            for (int j = 0; j < clusterToDelete.get(i).size(); j ++) {
+                deletedBlocks.add(clusterToDelete.get(i).get(j));
+            }
+        }
+        
+        for (List<Block> cluster : clusterToDelete) {
+            for (Block b : cluster) {
+                copy_blocks[b.getY()][b.getX()] = null;
+            }
+        }
+
+        this.blocks = copy_blocks;
+
     }
     
 
