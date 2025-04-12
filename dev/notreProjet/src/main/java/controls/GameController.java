@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import models.Block;
 import models.SandArea;
+import views.PauseMenuCtrl;
 
 
 public class GameController {
@@ -77,8 +78,14 @@ public class GameController {
             if (event.getCode() == KeyCode.ESCAPE){
                 timeline.pause();
                 try{
-                    pauseMenu = FXMLLoader.load(getClass().getResource("/fxml/PauseMenuView.fxml"));
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/PauseMenuView.fxml"));
+                    pauseMenu = loader.load();
                     root.getChildren().add(pauseMenu);
+                    PauseMenuCtrl controller = loader.getController();
+                    controller.setResumeButton(() -> {
+                        timeline.play();
+                        root.getChildren().remove(pauseMenu);
+                    });
                 }
                 catch (IOException e) {
                     e.printStackTrace();

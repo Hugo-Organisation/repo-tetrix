@@ -41,16 +41,16 @@ public class PauseMenuCtrl {
                 return;
             }
         }
-        if (event.getSource().equals(restartButton)){
+        if (event.getSource().equals(restartButton)){ // Que devient l'ancienne partie ?
             Stage stage = (Stage) restartButton.getScene().getWindow();
 
             GameController controller = new GameController();
             controller.startGame(stage);
         }
-        if (event.getSource().equals(resumeButton)){
-            Stage stage = (Stage) resumeButton.getScene().getWindow();
-            stage.close();
-        }
+    }
+
+    public void setResumeButton(Runnable action) {
+        resumeButton.setOnAction(e -> action.run());
     }
 
 }
