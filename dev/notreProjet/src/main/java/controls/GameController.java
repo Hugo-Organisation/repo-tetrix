@@ -91,7 +91,7 @@ public class GameController {
     }
 
     private void removeDeletedBlocks(){
-        ArrayList<Block> list = model.getNewBlocks();
+        ArrayList<Block> list = model.getDeletedBlocks();
         ArrayList<Block> toDelete = new ArrayList<>();
         for(Block block : list){
             root.getChildren().remove(particles.get(block));
