@@ -1,29 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Slider?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="600.0" stylesheets="@../css/MenuViewCSS.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.MenuViewCtrl">
+<VBox alignment="CENTER" prefHeight="700.0" prefWidth="650.0" spacing="100.0" styleClass="root" stylesheets="@../css/MenuViewCSS.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.MenuViewCtrl">
    <children>
-      <Button fx:id="aboutButton" layoutX="395.0" layoutY="299.0" mnemonicParsing="false" onMouseClicked="#onClic" prefHeight="70.0" prefWidth="130.0" text="ABOUT">
-         <font>
-            <Font size="5.0" />
-         </font></Button>
-      <Button fx:id="startButton" layoutX="235.0" layoutY="299.0" mnemonicParsing="false" onMouseClicked="#onClic" prefHeight="70.0" prefWidth="130.0" text="START" />
-      <Text fx:id="Title" layoutX="205.0" layoutY="219.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SANDTRIS" textAlignment="CENTER">
-         <font>
-            <Font size="40.0" />
-         </font>
-      </Text>
-      <Button fx:id="leaderboardButton" layoutX="75.0" layoutY="299.0" mnemonicParsing="false" onMouseClicked="#onClic" prefHeight="70.0" prefWidth="130.0" text="LEADERBOARD" />
-      <Slider fx:id="MusicSlider" layoutX="230.0" layoutY="550.0" />
-      <Text fx:id="MusicTitle" layoutX="268.0" layoutY="519.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MUSIC">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Text>
+      <Text fx:id="Title" strokeType="OUTSIDE" strokeWidth="0.0" text="SANDTRIS" textAlignment="CENTER">
+         <VBox.margin>
+            <Insets bottom="60.0" />
+         </VBox.margin></Text>
+      <HBox alignment="CENTER" spacing="60.0">
+         <children>
+            <Button fx:id="aboutButton" mnemonicParsing="false" onMouseClicked="#onClic" text="ABOUT" />
+            <Button fx:id="startButton" mnemonicParsing="false" onMouseClicked="#onClic" text="START" />
+            <Button fx:id="leaderboardButton" mnemonicParsing="false" onMouseClicked="#onClic" text="LEADERBOARD" />
+         </children>
+      </HBox>
+      <VBox alignment="CENTER">
+         <children>
+            <Text fx:id="MusicTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="MUSIC" />
+            <Slider fx:id="MusicSlider" max="20.0" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" />
+         </children>
+      </VBox>
    </children>
-</AnchorPane>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</VBox>

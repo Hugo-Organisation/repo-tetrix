@@ -1,21 +1,20 @@
+import java.io.IOException;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import views.MainMenu;
-
-import java.io.IOException;
 
 public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-
         Parent root;
 
         try {
-
+            Font.loadFont(getClass().getResourceAsStream("/fonts/LLPIXEL3.ttf"), 14);
             root = FXMLLoader.load(getClass().getResource("/fxml/MenuView.fxml"));
 
             Scene menuScene = new Scene(root);
@@ -28,12 +27,6 @@ public class App extends Application {
             e.printStackTrace();
             return;
         }
-
-//        Scene menuScene = new Scene(new MainMenu(primaryStage));
-//
-//        primaryStage.setTitle("Menu Principal");
-//        primaryStage.setScene(menuScene);
-//        primaryStage.show();
     }
 
     public static void main(String[] args) {
