@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane stylesheets="@../css/JeuViewCSS.css" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <stylesheets>
+   </stylesheets>
+   <children>
+      <HBox prefHeight="400.0" prefWidth="600.0">
+         <children>
+            <Pane fx:id="cotePane" prefHeight="400.0" prefWidth="71.0" />
+            <Pane fx:id="jeuPane" prefHeight="400.0" prefWidth="346.0" />
+            <VBox prefHeight="400.0" prefWidth="191.0">
+               <children>
+                  <Pane fx:id="previewPane" prefHeight="200.0" prefWidth="200.0" />
+                  <Pane fx:id="scorePane" prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <Text layoutX="56.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Score" />
+                     </children>
+                  </Pane>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
