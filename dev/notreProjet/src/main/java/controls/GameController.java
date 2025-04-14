@@ -1,5 +1,6 @@
 package controls;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -7,6 +8,8 @@ import controls.tetromino.Square;
 import controls.tetromino.Tetromino;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
@@ -14,9 +17,14 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import models.Block;
 import models.SandArea;
+import views.PauseMenuCtrl;
 
 
 public class GameController {
+    private Timeline timeline;
+    private Parent pauseMenu;
+    private boolean pauseToggle = false;
+
     private Tetromino tetromino;
     private Pane root;
     private Scene scene;
@@ -24,11 +32,11 @@ public class GameController {
 
     private final int particleSize = 5;
     private final int squareRatio = 10;
-    private final int widthRatio = 14;
+    private final int widthRatio = 10;
     private final int heightRatio = 14;
 
     private final int width = widthRatio*squareRatio*particleSize;
-    private final int height = widthRatio*squareRatio*particleSize;
+    private final int height = heightRatio*squareRatio*particleSize;
     private final double initialX = (widthRatio/2)*squareRatio*particleSize;
     private final int v = particleSize;
     private double vy = v;
@@ -68,6 +76,32 @@ public class GameController {
             if (event.getCode() == KeyCode.LEFT) vx = -v;
             if (event.getCode() == KeyCode.RIGHT) vx = v;
             if (event.getCode() == KeyCode.SPACE) tetromino.rotation();
+            if (event.getCode() == KeyCode.ESCAPE){
+                if(pauseToggle){
+                    timeline.play();
+                    root.getChildren().remove(pauseMenu);
+                }
+                else{
+                    timeline.pause();
+                    try{
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/PauseMenuView.fxml"));
+                        pauseMenu = loader.load();                    
+                        
+                        root.getChildren().add(pauseMenu);
+                        PauseMenuCtrl controller = loader.getController();
+                        pauseMenu.setLayoutY(height / 2 - controller.getHeight()/2);
+                        controller.setResumeButton(() -> {
+                            timeline.play();
+                            root.getChildren().remove(pauseMenu);
+                        });
+                    }
+                    catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                pauseToggle = !pauseToggle;
+
+            }
         });
         scene.setOnKeyReleased(event -> {
             if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN) vy = v;
@@ -152,7 +186,7 @@ public class GameController {
     }
 
     public void updateFrame() {
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000.0 / FPS), event -> {updateSquare();}));
+        timeline = new Timeline(new KeyFrame(Duration.millis(1000.0 / FPS), event -> {updateSquare();}));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
     }

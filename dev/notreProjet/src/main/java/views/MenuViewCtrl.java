@@ -1,16 +1,15 @@
 package views;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import controls.GameController;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
-import java.net.URL;
-import java.util.ResourceBundle;
 
 public class MenuViewCtrl implements javafx.fxml.Initializable {
 
@@ -27,7 +26,13 @@ public class MenuViewCtrl implements javafx.fxml.Initializable {
     private Button aboutButton;
 
     @FXML
+    private Button exitButton;
+
+    @FXML
     private Button leaderboardButton;
+
+    @FXML
+    private Button parametresButton;
 
     @FXML
     private Button startButton;
@@ -39,6 +44,10 @@ public class MenuViewCtrl implements javafx.fxml.Initializable {
 
             GameController controller = new GameController();
             controller.startGame(stage);
+        }
+        if (event.getSource().equals(exitButton)){
+            Stage stage = (Stage) startButton.getScene().getWindow();
+            stage.close();
         }
 
     }

@@ -1,48 +1,41 @@
-/* Importation de la police Roboto depuis Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
-
-/* Définir la police Roboto dans tout le projet */
 .root {
     -fx-background-image: url("../images/forest_path_pixel.png");
     -fx-background-size: cover;
-    -fx-font-family: 'Roboto', sans-serif; /* Appliquer Roboto à toute l'application */
-    -fx-font-size: 14px; /* Taille de la police pour le texte général */
+    -fx-font-family: 'LLPixel';
     -fx-text-fill: white;
 }
+Text {
+    -fx-font-size: 52px; 
+    -fx-fill: #ffe28a;
+    -fx-effect: dropshadow(gaussian, #3b1e00, 6, 0.8, 0, 2);
+}
 
-/* Style des boutons */
-.button {
+Button {
+    -fx-pref-width: 160px;
+    -fx-pref-height: 70px;
+    -fx-font-size: 20px; 
+    -fx-text-fill: #fcebb3;
     -fx-background-color: rgba(34, 28, 26, 0.8);
     -fx-border-color: #c9af98;
     -fx-border-width: 2px;
-    -fx-text-fill: #fcebb3;
-    -fx-font-family: 'Roboto', sans-serif; /* Appliquer Roboto aux boutons */
-    -fx-font-size: 14px !important; /* Ajuster la taille de la police dans les boutons */
-    -fx-font-weight: 400; /* Poids normal */
     -fx-effect: dropshadow(gaussian, #000000, 2, 0.5, 0, 1);
     -fx-background-radius: 4;
     -fx-border-radius: 4;
 }
 
-/* Hover pour les boutons */
-.button:hover {
+Button:hover {
     -fx-background-color: rgba(255, 239, 184, 0.9);
     -fx-text-fill: #5a3e36;
     -fx-border-color: #ffffff;
     -fx-effect: dropshadow(gaussian, #ffeeaa, 4, 0.8, 0, 1);
 }
 
-/* Style des titres */
-.text {
-    -fx-font-family: 'Roboto', sans-serif; /* Appliquer Roboto aux titres */
-    -fx-font-size: 36px; /* Taille du texte pour les titres */
-    -fx-fill: #ffe28a;
-    -fx-effect: dropshadow(gaussian, #3b1e00, 6, 0.8, 0, 2);
-    -fx-font-weight: 700; /* Poids plus fort pour les titres */
+Slider {
+    -fx-pref-width: 200px;
+    -fx-font-size: 20px;
+    -fx-background-color: rgba(0, 0, 0, 0.3);
 }
 
-/* Style de la barre de défilement */
-.slider {
-    -fx-control-inner-background: transparent;
-    -fx-background-color: rgba(0, 0, 0, 0.3);
+#MusicTitle {
+    -fx-font-size: 30px;
 }
