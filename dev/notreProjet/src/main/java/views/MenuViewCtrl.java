@@ -49,6 +49,10 @@ public class MenuViewCtrl implements javafx.fxml.Initializable {
             Stage stage = (Stage) startButton.getScene().getWindow();
             stage.close();
         }
+        if (event.getSource().equals(aboutButton)){
+            Stage stage = (Stage) aboutButton.getScene().getWindow();
+
+        }
 
     }
 
