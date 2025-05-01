@@ -1,90 +1,48 @@
-/* Définition de la police de style Pixel */
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
-/* Style général pour la scène */
 .root {
-    -fx-background-color: black;  /* Fond noir */
+    -fx-background-image: url("../images/forest_path_pixel.png");
+    -fx-background-size: cover;
+    -fx-font-family: 'LLPixel';
+    -fx-text-fill: white;
+}
+Label {
+    -fx-font-size: 18px; 
+    -fx-text-fill: #ffe28a;
+    -fx-effect: dropshadow(gaussian, #3b1e00, 6, 0.8, 0, 2);
 }
 
-/* Styles pour l'AnchorPane */
-.AnchorPane {
-    -fx-background-color: #1a1a1a; /* Gris foncé pour le fond */
-}
-achary
-/* Style pour le HBox */
-.HBox {
-    -fx-background-color: #333333; /* Arrière-plan gris foncé */
-    -fx-padding: 10;
-}
-
-/* Style pour les Panneaux */
-.Pane {
-    -fx-background-color: #444444; /* Arrière-plan gris pour les panneaux */
-    -fx-border-color: #888888; /* Bordure gris clair */
-    -fx-border-width: 2;
+Button {
+    -fx-pref-width: 160px;
+    -fx-pref-height: 70px;
+    -fx-font-size: 20px; 
+    -fx-text-fill: #fcebb3;
+    -fx-background-color: rgba(34, 28, 26, 0.8);
+    -fx-border-color: #c9af98;
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, #000000, 2, 0.5, 0, 1);
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
 }
 
-/* Style pour le VBox */
-.VBox {
-    -fx-background-color: #333333;
-    -fx-padding: 10;
+Button:hover {
+    -fx-background-color: rgba(255, 239, 184, 0.9);
+    -fx-text-fill: #5a3e36;
+    -fx-border-color: #ffffff;
+    -fx-effect: dropshadow(gaussian, #ffeeaa, 4, 0.8, 0, 1);
 }
 
-/* Style pour les textes (Score, etc.) */
-.Text {
-    -fx-font-family: 'Press Start 2P', sans-serif; /* Police de style pixel */
-    -fx-font-size: 16px;
-    -fx-fill: #00FF00;  /* Texte vert vif pour les titres */
-    -fx-effect: dropshadow(gaussian, #000000, 2, 0.5, 0, 1); /* Ombre portée pour effet rétro */
+Pane {
+    -fx-background-size: 500px 700px;
+    -fx-border-color: #c9af98;
+    -fx-border-width: 2px;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
 }
 
-/* Style pour le bouton de jeu */
-.button {
-    -fx-background-color: #ffcc00;  /* Jaune pour les boutons */
-    -fx-text-fill: #000000;  /* Texte noir */
-    -fx-font-family: 'Press Start 2P', sans-serif; /* Police rétro */
-    -fx-font-size: 14px;
-    -fx-padding: 10 20;
-    -fx-border-radius: 5;
-    -fx-effect: dropshadow(gaussian, #000000, 5, 0.5, 0, 1);  /* Ombre portée */
+#gamePane {
+    -fx-background-image: url("../images/brick_wall.png");
 }
 
-/* Effet de survol des boutons */
-.button:hover {
-    -fx-background-color: #ff9900; /* Jaune plus clair */
-    -fx-text-fill: #ffffff; /* Texte blanc */
-    -fx-effect: dropshadow(gaussian, #ffffff, 6, 0.8, 0, 1); /* Ombre plus forte */
-}
-
-/* Style pour le preview (l'aperçu des pièces) */
 #previewPane {
-    -fx-background-color: #222222; /* Fond gris très foncé */
-    -fx-border-color: #00FF00; /* Bordure verte */
-    -fx-border-width: 2px;
-}
+    -fx-background-image: url("../images/brick_wall.png");
 
-/* Style pour le score */
-#scorePane {
-    -fx-background-color: #222222;
-    -fx-border-color: #ffcc00; /* Bordure jaune */
-    -fx-border-width: 2px;
-}
-
-/* Style spécifique au texte dans le score */
-#scorePane .Text {
-    -fx-font-size: 24px; /* Plus grand pour le score */
-    -fx-fill: #ffcc00;  /* Jaune pour le texte du score */
-    -fx-effect: dropshadow(gaussian, #000000, 2, 0.8, 0, 1);  /* Ombre portée légère */
-}
-
-/* Style pour les autres éléments de l'interface */
-#jeuPane {
-    -fx-background-color: #111111;  /* Fond noir pour le jeu */
-}
-
-/* Apparence de la grille (si tu en as besoin pour le jeu) */
-#jeuPane .grid {
-    -fx-background-color: #222222; /* Fond gris très foncé */
-    -fx-border-color: #555555; /* Bordure gris clair */
-    -fx-border-width: 1px;
 }
