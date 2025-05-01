@@ -1,29 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/JeuViewCSS.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
-   <stylesheets>
-   </stylesheets>
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="700.0" stylesheets="@../css/MenuViewCSS.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <HBox prefHeight="400.0" prefWidth="600.0">
+      <Pane prefHeight="700.0" prefWidth="500.0">
+         <HBox.margin>
+            <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+         </HBox.margin>
+      </Pane>
+      <VBox prefHeight="200.0" prefWidth="100.0" spacing="50.0">
          <children>
-            <Pane fx:id="jeuPane" prefHeight="400.0" prefWidth="399.0" />
-            <VBox prefHeight="400.0" prefWidth="191.0">
+            <Button mnemonicParsing="false" text="Pause" />
+            <Pane prefHeight="100.0" prefWidth="100.0" />
+            <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Pane fx:id="previewPane" prefHeight="196.0" prefWidth="236.0" />
-                  <Pane fx:id="scorePane" prefHeight="207.0" prefWidth="216.0">
-                     <children>
-                        <Text layoutX="56.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Score" />
-                     </children>
-                  </Pane>
+                  <Label text="Score :" />
+                  <Label text="1000" />
                </children>
-            </VBox>
+            </HBox>
          </children>
-      </HBox>
+         <HBox.margin>
+            <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+         </HBox.margin>
+      </VBox>
    </children>
-</AnchorPane>
+</HBox>
