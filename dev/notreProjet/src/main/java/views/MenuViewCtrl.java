@@ -1,10 +1,13 @@
 package views;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import controls.GameController;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
@@ -41,9 +44,19 @@ public class MenuViewCtrl implements javafx.fxml.Initializable {
     void onClic(MouseEvent event) {
         if (event.getSource().equals(startButton)) {
             Stage stage = (Stage) startButton.getScene().getWindow();
-
-            GameController controller = new GameController();
-            controller.startGame(stage);
+            try{
+                Parent root = FXMLLoader.load(getClass().getResource("/fxml/JeuView.fxml"));
+                // root.requestFocus();
+                
+                Scene menuScene = new Scene(root);
+                stage.setScene(menuScene);
+                stage.sizeToScene();
+                stage.show();
+            }
+            catch(IOException e){
+                e.printStackTrace();
+                return;
+            }
         }
         if (event.getSource().equals(exitButton)){
             Stage stage = (Stage) startButton.getScene().getWindow();

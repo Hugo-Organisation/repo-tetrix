@@ -13,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import models.Block;
@@ -24,6 +25,8 @@ public class GameController {
     private Timeline timeline;
     private Parent pauseMenu;
     private boolean pauseToggle = false;
+    private int time = 0;
+    private final int fallTime = 10;
 
     private Tetromino tetromino;
     private Pane root;
@@ -34,6 +37,7 @@ public class GameController {
     private final int squareRatio = 10;
     private final int widthRatio = 10;
     private final int heightRatio = 14;
+    private final int destructionAnimation = 30;
 
     private final int width = widthRatio*squareRatio*particleSize;
     private final int height = heightRatio*squareRatio*particleSize;
@@ -45,13 +49,13 @@ public class GameController {
     private final HashMap<Block,Square> particles = new HashMap<>();
 
 
-    public GameController() {
+    public GameController(Pane root) {
+        this.root = root;
     }
 
     public void startGame(Stage primaryStage) {
         System.out.println("Game started");
-        root = new Pane();
-        scene = new Scene(root, width, height);
+        scene = root.getScene();
         model = new SandArea(widthRatio*squareRatio, heightRatio*squareRatio,squareRatio);
         
         tetromino = new Tetromino(squareRatio*particleSize);
@@ -69,43 +73,56 @@ public class GameController {
         root.requestFocus();
     }
 
+    public void pauseGame(){
+        if(pauseToggle){
+            timeline.play();
+            root.getChildren().remove(pauseMenu);
+        }
+        else{
+            timeline.pause();
+            try{
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/PauseMenuView.fxml"));
+                pauseMenu = loader.load();                    
+                
+                root.getChildren().add(pauseMenu);
+                PauseMenuCtrl controller = loader.getController();
+                controller.setGameController(this);
+                pauseMenu.setLayoutY(height / 2 - controller.getHeight()/2);
+                controller.setResumeButton(() -> {
+                    timeline.play();
+                    root.getChildren().remove(pauseMenu);
+                });
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        pauseToggle = !pauseToggle;
+    }
+
+    public void quitGame(){
+        timeline.stop();
+    }
+
+    public void restartGame(){
+        quitGame();
+        root.getChildren().clear();
+    }
+
     public void getCommand() {
         scene.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.UP) vy = -v;
-            if (event.getCode() == KeyCode.DOWN) vy = v;
+            // if (event.getCode() == KeyCode.UP) vy = -v;
+            // if (event.getCode() == KeyCode.DOWN) vy = v;
             if (event.getCode() == KeyCode.LEFT) vx = -v;
             if (event.getCode() == KeyCode.RIGHT) vx = v;
             if (event.getCode() == KeyCode.SPACE) tetromino.rotation();
-            if (event.getCode() == KeyCode.ESCAPE){
-                if(pauseToggle){
-                    timeline.play();
-                    root.getChildren().remove(pauseMenu);
-                }
-                else{
-                    timeline.pause();
-                    try{
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/PauseMenuView.fxml"));
-                        pauseMenu = loader.load();                    
-                        
-                        root.getChildren().add(pauseMenu);
-                        PauseMenuCtrl controller = loader.getController();
-                        pauseMenu.setLayoutY(height / 2 - controller.getHeight()/2);
-                        controller.setResumeButton(() -> {
-                            timeline.play();
-                            root.getChildren().remove(pauseMenu);
-                        });
-                    }
-                    catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                pauseToggle = !pauseToggle;
-
-            }
+            if (event.getCode() == KeyCode.ESCAPE) pauseGame();
+            root.requestFocus();
         });
         scene.setOnKeyReleased(event -> {
-            if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN) vy = v;
+            // if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN) vy = v;
             if (event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT) vx = 0;
+            root.requestFocus();
         });
     }
 
@@ -113,7 +130,7 @@ public class GameController {
         ArrayList<Block> list = model.getNewBlocks();
         ArrayList<Block> toDelete = new ArrayList<>();
         for(Block block : list){
-            Square particle = new Square(v, tetromino.previous_couleur);
+            Square particle = new Square(v, tetromino.current_couleur);
             particle.setX(block.getX()*v);
             particle.setY(block.getY()*v);
             particles.put(block, particle);
@@ -128,11 +145,21 @@ public class GameController {
     private void removeDeletedBlocks(){
         ArrayList<Block> list = model.getDeletedBlocks();
         ArrayList<Block> toDelete = new ArrayList<>();
+        int cpt = 0;
         for(Block block : list){
-            Square particle = particles.get(block);
-            root.getChildren().remove(particle);
-            particles.remove(block);
-            toDelete.add(block);
+            if(cpt >= 2*destructionAnimation){
+                break;
+            }
+            else if(cpt >= destructionAnimation){
+                particles.get(block).setFill(Color.WHITE);
+            }
+            else{
+                Square particle = particles.get(block);
+                root.getChildren().remove(particle);
+                particles.remove(block);
+                toDelete.add(block);
+            }
+            cpt++;
         }
         for(Block block : toDelete){
             list.remove(block);
@@ -158,31 +185,47 @@ public class GameController {
 
     private void updateSquare() {
 
+        model.removeBlocksToDelete();
+        removeDeletedBlocks();
+
+        time = (time+1)%fallTime;
+        if(time == 0){
+            vy = v;
+        }
+        else if (time == squareRatio/2){
+            vy = 0;
+        }
+
+        if(model.getDeletedBlocks()!=null && !model.getDeletedBlocks().isEmpty()){
+            vy = 0;
+        }
+        else{
+            model.animateBlocks();
+            updateParticles();
+        }
+
         double newX = tetromino.getX() + vx;
         double newY = tetromino.getY() + vy;
 
+        if (tetromino.checkFormCollision(model,0,vy,particleSize) && tetromino.getY() == 0) {
+            timeline.pause();
+        }
         if (tetromino.checkFormCollision(model,0,vy,particleSize)) {
-             tetromino.createParticleFromForm(model,particleSize);
-             tetromino.setX(initialX,width,height);
-             tetromino.setY(0,width,height);
-             tetromino.changeColor();
-             tetromino.reset();
-             vx = 0;
-             return;
+            tetromino.createParticleFromForm(model,particleSize);
+            addNewBlocks();
+            tetromino.setX(initialX,width,height);
+            tetromino.setY(0,width,height);
+            tetromino.changeColor();
+            tetromino.reset();
+            vx = 0;
+            return;
          }
          if (tetromino.checkFormCollision(model,vx,0,particleSize)) {
-             newX = tetromino.getX();
+            newX = tetromino.getX();
          }
 
         tetromino.setY(newY,width,height);
         tetromino.setX(newX,width,height);
-
-        model.animateBlocks();
-        addNewBlocks();
-        updateParticles();
-
-        model.removeBlocksToDelete();
-        removeDeletedBlocks();
     }
 
     public void updateFrame() {

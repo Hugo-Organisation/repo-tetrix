@@ -40,6 +40,8 @@ Pane {
 
 #gamePane {
     -fx-background-image: url("../images/brick_wall.png");
+    -fx-border-width: 0px;
+
 }
 
 #previewPane {

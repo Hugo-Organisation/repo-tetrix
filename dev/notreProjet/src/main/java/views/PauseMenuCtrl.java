@@ -15,6 +15,12 @@ import javafx.stage.Stage;
 
 public class PauseMenuCtrl {
 
+    private GameController gameController;
+
+    public void setGameController(GameController gameController) {
+        this.gameController = gameController;
+    }
+
     @FXML
     private VBox root;
 
@@ -31,6 +37,7 @@ public class PauseMenuCtrl {
     void onClic(MouseEvent event) {
         if (event.getSource().equals(quitButton)){
             try {
+                gameController.quitGame();
                 Stage stage = (Stage) quitButton.getScene().getWindow();
                 Font.loadFont(getClass().getResourceAsStream("/fonts/LLPIXEL3.ttf"), 14);
                 Parent root = FXMLLoader.load(getClass().getResource("/fxml/MenuView.fxml"));
@@ -45,11 +52,10 @@ public class PauseMenuCtrl {
                 return;
             }
         }
-        if (event.getSource().equals(restartButton)){ // Que devient l'ancienne partie ?
+        if (event.getSource().equals(restartButton)){
             Stage stage = (Stage) restartButton.getScene().getWindow();
-
-            GameController controller = new GameController();
-            controller.startGame(stage);
+            gameController.restartGame();
+            gameController.startGame(stage);
         }
     }
 
