@@ -66,9 +66,10 @@ public class GameController {
         tetromino.addToRoot(root);
         tetromino.setX(initialX,width,height);
 
-        prevTetromino = new Tetromino(squareRatio/2*particleSize);
+        prevTetromino = new Tetromino(4*particleSize);
         prevTetromino.addToRoot(preview);
-        prevTetromino.setX(0,previewSize,previewSize);
+        prevTetromino.setX(previewSize/2,previewSize,previewSize);
+        prevTetromino.setY(previewSize/2,previewSize,previewSize);
 
         getCommand();
         updateFrame();
@@ -115,6 +116,7 @@ public class GameController {
     public void restartGame(){
         quitGame();
         root.getChildren().clear();
+        preview.getChildren().clear();
     }
 
     public void getCommand() {
@@ -221,13 +223,14 @@ public class GameController {
         if (tetromino.checkFormCollision(model,0,vy,particleSize)) {
             tetromino.createParticleFromForm(model,particleSize);
             addNewBlocks();
-            tetromino.setX(initialX,width,height);
-            tetromino.setY(0,width,height);
             tetromino.setForm(prevTetromino.getForm());
             tetromino.setColor(prevTetromino.getColor());
+            tetromino.setX(initialX,width,height);
+            tetromino.setY(0,width,height);
 
             prevTetromino.resetColor();
             prevTetromino.resetForm();
+
             vx = 0;
             return;
          }

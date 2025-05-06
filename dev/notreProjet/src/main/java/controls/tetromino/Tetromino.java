@@ -12,6 +12,7 @@ public class Tetromino {
     private Form form;
     private Color color;
     private double x,y;
+    private double xDiff,yDiff;
     private final int squareSize;
 
     private static final Color[] COULEURS_POSSIBLES = {
@@ -34,13 +35,17 @@ public class Tetromino {
     }
 
     private void updateSquarePosition(){
+
+        xDiff = form.getWidth()*squareSize/2;
+        yDiff = form.getHeight()*squareSize/2;
+
         int[][] mat = form.getMatrice();
         int k = 0;
         for(int i=0; i<mat.length;i++){
             for(int j=0; j<mat.length;j++){
                 if(mat[i][j] == 1){
-                    squares[k].setX((j*squareSize + x));
-                    squares[k].setY((i*squareSize + y));
+                    squares[k].setX((j*squareSize + x - xDiff));
+                    squares[k].setY((i*squareSize + y - yDiff));
                     k++;
                 }
             }
@@ -86,15 +91,15 @@ public class Tetromino {
     }
 
     public void setX(double X, double width, double height){
-        double minX = 0 - form.getLeftXSpace()*squareSize;
-        double maxX = width - form.getRightXSpace()*squareSize;
+        double minX = 0 - form.getLeftXSpace()*squareSize + xDiff;
+        double maxX = width - form.getRightXSpace()*squareSize + xDiff;
         x = Math.max(minX, Math.min(X, maxX));
         updateSquarePosition();
     }
 
     public void setY(double Y,double width, double height){
-        double minY = 0 - form.getTopYSpace()*squareSize;
-        double maxY = height - form.getBottomYSpace()*squareSize;
+        double minY = 0 - form.getTopYSpace()*squareSize + yDiff;
+        double maxY = height - form.getBottomYSpace()*squareSize + yDiff;
         y = Math.max(minY, Math.min(Y, maxY));
         updateSquarePosition();
     }
@@ -108,6 +113,7 @@ public class Tetromino {
     public void resetForm(){
         form = Form.getFormeAleatoire(squareSize);
         updateSquarePosition();
+        
     }
 
     public void resetColor() {
