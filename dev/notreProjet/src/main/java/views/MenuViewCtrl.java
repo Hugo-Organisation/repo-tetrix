@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -70,8 +71,17 @@ public class MenuViewCtrl implements javafx.fxml.Initializable {
     }
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
+    public void initialize(URL location, ResourceBundle resources) {
+        MediaPlayer player = MediaManager.getInstance().getMediaPlayer();
+        if (player != null) {
+            MusicSlider.setValue(player.getVolume()*20);
+            MusicSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+                player.setVolume(newVal.doubleValue()/20);
+            });
+        } else {
+            System.err.println("Le MediaPlayer n'a pas pu être initialisé.");
+        }
     }
+
 }
 
