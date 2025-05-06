@@ -29,7 +29,9 @@ public class GameController {
     private final int fallTime = 10;
 
     private Tetromino tetromino;
+    private Tetromino prevTetromino;
     private Pane root;
+    private Pane preview;
     private Scene scene;
     private SandArea model;
 
@@ -38,6 +40,7 @@ public class GameController {
     private final int widthRatio = 10;
     private final int heightRatio = 14;
     private final int destructionAnimation = 30;
+    private final int previewSize = 100; 
 
     private final int width = widthRatio*squareRatio*particleSize;
     private final int height = heightRatio*squareRatio*particleSize;
@@ -49,8 +52,9 @@ public class GameController {
     private final HashMap<Block,Square> particles = new HashMap<>();
 
 
-    public GameController(Pane root) {
+    public GameController(Pane root, Pane preview) {
         this.root = root;
+        this.preview = preview;
     }
 
     public void startGame(Stage primaryStage) {
@@ -61,6 +65,10 @@ public class GameController {
         tetromino = new Tetromino(squareRatio*particleSize);
         tetromino.addToRoot(root);
         tetromino.setX(initialX,width,height);
+
+        prevTetromino = new Tetromino(squareRatio/2*particleSize);
+        prevTetromino.addToRoot(preview);
+        prevTetromino.setX(0,previewSize,previewSize);
 
         getCommand();
         updateFrame();
@@ -130,7 +138,7 @@ public class GameController {
         ArrayList<Block> list = model.getNewBlocks();
         ArrayList<Block> toDelete = new ArrayList<>();
         for(Block block : list){
-            Square particle = new Square(v, tetromino.current_couleur);
+            Square particle = new Square(v, tetromino.getColor());
             particle.setX(block.getX()*v);
             particle.setY(block.getY()*v);
             particles.put(block, particle);
@@ -215,8 +223,11 @@ public class GameController {
             addNewBlocks();
             tetromino.setX(initialX,width,height);
             tetromino.setY(0,width,height);
-            tetromino.changeColor();
-            tetromino.reset();
+            tetromino.setForm(prevTetromino.getForm());
+            tetromino.setColor(prevTetromino.getColor());
+
+            prevTetromino.resetColor();
+            prevTetromino.resetForm();
             vx = 0;
             return;
          }

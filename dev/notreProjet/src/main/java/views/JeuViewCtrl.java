@@ -33,7 +33,7 @@ public class JeuViewCtrl implements javafx.fxml.Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         javafx.application.Platform.runLater(() -> {
             Stage stage = (Stage) gamePane.getScene().getWindow();
-            controller = new GameController(gamePane);
+            controller = new GameController(gamePane,previewPane);
             controller.startGame(stage);
         });
     }

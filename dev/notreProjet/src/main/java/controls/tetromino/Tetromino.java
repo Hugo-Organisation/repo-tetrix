@@ -10,8 +10,7 @@ import models.SandArea;
 public class Tetromino {
     private final Square[] squares;
     private Form form;
-    public Color current_couleur = COULEURS_POSSIBLES[new Random().nextInt(COULEURS_POSSIBLES.length)];
-    public Color previous_couleur = null;
+    private Color color;
     private double x,y;
     private final int squareSize;
 
@@ -19,25 +18,19 @@ public class Tetromino {
         // Color.BLUE, Color.ORANGE, Color.GREEN, 
         Color.RED, Color.PURPLE
     };
-
-    public void changeColor() {
-        Color new_color = COULEURS_POSSIBLES[new Random().nextInt(COULEURS_POSSIBLES.length)];
-        this.previous_couleur = current_couleur;
-        this.current_couleur = new_color;
-        for(int i = 0; i<4; i++){
-            squares[i].setFill(new_color);
-        }
-    }
     
     public Tetromino(int squareSize){
         this.squareSize= squareSize;
         x = 0;
         y = 0;
+        form = Form.getFormeAleatoire(squareSize);
+        color = COULEURS_POSSIBLES[new Random().nextInt(COULEURS_POSSIBLES.length)];
         squares = new Square[4];
         for(int i = 0; i<4; i++){
-            squares[i] = new Square(squareSize, current_couleur);
+            squares[i] = new Square(squareSize, color);
         }
-        form = Form.getFormeAleatoire(squareSize);
+        updateColor();
+        updateSquarePosition();
     }
 
     private void updateSquarePosition(){
@@ -51,6 +44,12 @@ public class Tetromino {
                     k++;
                 }
             }
+        }
+    }
+
+    private void updateColor(){
+        for(int i = 0; i<4; i++){
+            squares[i].setFill(color);
         }
     }
 
@@ -69,7 +68,7 @@ public class Tetromino {
         for(int k=0; k<4;k++){
             double X = squares[k].getX();
             double Y = squares[k].getY();
-            model.createBlock((int)X/particleSize, (int)Y/particleSize, current_couleur);
+            model.createBlock((int)X/particleSize, (int)Y/particleSize, color);
         }
     }
 
@@ -106,8 +105,31 @@ public class Tetromino {
         }
     }
 
-    public void reset(){
+    public void resetForm(){
         form = Form.getFormeAleatoire(squareSize);
         updateSquarePosition();
+    }
+
+    public void resetColor() {
+        color = COULEURS_POSSIBLES[new Random().nextInt(COULEURS_POSSIBLES.length)];
+        updateColor();
+    }
+
+    public void setForm(Form newForm){
+        this.form = newForm;
+        updateSquarePosition();
+    }
+
+    public Form getForm(){
+        return form;
+    }
+
+    public void setColor(Color newColor){
+        this.color = newColor;
+        updateColor();
+    }
+
+    public Color getColor(){
+        return color;
     }
 }
