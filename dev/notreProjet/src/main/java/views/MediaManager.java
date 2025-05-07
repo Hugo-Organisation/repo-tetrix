@@ -1,5 +1,9 @@
 package views;
 
+import javafx.event.EventHandler;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -17,6 +21,10 @@ public class MediaManager {
 
     private boolean isCollisionPlaying = false;
     private boolean isDestructionPlaying = false;
+
+    private Media clickSoundMedia;
+    private MediaPlayer clickSoundPlayer;
+    private boolean isClickPlaying = false;
 
     private MediaManager() {
     }
@@ -65,6 +73,14 @@ public class MediaManager {
                     isCollisionPlaying = false;
                 });
 
+                String clickPath = getClass().getResource("/mp3/minecraft_placing_block.wav").toExternalForm();
+                clickSoundMedia = new Media(clickPath);
+                clickSoundPlayer = new MediaPlayer(clickSoundMedia);
+                clickSoundPlayer.setOnEndOfMedia(() -> {
+                    clickSoundPlayer.dispose();
+                    isClickPlaying = false;
+                });
+
                 
                 soundPreloaded = true;
             } catch (Exception e) {
@@ -95,4 +111,34 @@ public class MediaManager {
         isCollisionPlaying = true;
         groundCollisionPlayer.play();
     }
+
+    public void playClickSound() {
+        if (groundCollisionMedia == null || isClickPlaying) return;
+        clickSoundPlayer = new MediaPlayer(clickSoundMedia);
+        clickSoundPlayer.setOnEndOfMedia(() -> {
+            clickSoundPlayer.dispose();
+            isClickPlaying = false;
+        });
+        isClickPlaying = true;
+        clickSoundPlayer.play();
+    }
+
+    public static void attachClickSoundToAllButtons(Parent root) {
+        for (Node node : root.getChildrenUnmodifiable()) {
+            if (node instanceof Button) {
+                Button button = (Button) node;
+                EventHandler<javafx.event.ActionEvent> originalHandler = button.getOnAction();
+                button.setOnAction(event -> {
+                    MediaManager.getInstance().playClickSound();
+                    if (originalHandler != null) {
+                        originalHandler.handle(event);
+                    }
+                });
+            } else if (node instanceof Parent) {
+                // Appel récursif pour les sous-conteneurs (VBox, HBox, GridPane, etc.)
+                attachClickSoundToAllButtons((Parent) node);
+            }
+        }
+    }
+
 }

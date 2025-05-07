@@ -18,6 +18,7 @@ public class App extends Application {
         Parent root;
         try {
             root = FXMLLoader.load(getClass().getResource("/fxml/MenuView.fxml"));
+            MediaManager.attachClickSoundToAllButtons(root);
 
             Scene menuScene = new Scene(root);
             primaryStage.setScene(menuScene);

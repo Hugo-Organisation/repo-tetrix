@@ -47,7 +47,7 @@ public class MenuViewCtrl implements javafx.fxml.Initializable {
             Stage stage = (Stage) startButton.getScene().getWindow();
             try{
                 Parent root = FXMLLoader.load(getClass().getResource("/fxml/JeuView.fxml"));
-                // root.requestFocus();
+                MediaManager.attachClickSoundToAllButtons(root);
                 
                 Scene menuScene = new Scene(root);
                 stage.setScene(menuScene);

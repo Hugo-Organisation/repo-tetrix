@@ -40,7 +40,7 @@ public class GameController {
     private final int squareRatio = 10;
     private final int widthRatio = 10;
     private final int heightRatio = 14;
-    
+
     private final int destructionAnimation = 30; //modifié
     private final int previewSize = 100; 
 
@@ -93,7 +93,9 @@ public class GameController {
             timeline.pause();
             try{
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/PauseMenuView.fxml"));
-                pauseMenu = loader.load();                    
+                pauseMenu = loader.load();
+                MediaManager.attachClickSoundToAllButtons(pauseMenu);
+
                 
                 root.getChildren().add(pauseMenu);
                 PauseMenuCtrl controller = loader.getController();

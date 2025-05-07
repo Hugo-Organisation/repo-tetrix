@@ -41,6 +41,7 @@ public class PauseMenuCtrl {
                 Stage stage = (Stage) quitButton.getScene().getWindow();
                 Font.loadFont(getClass().getResourceAsStream("/fonts/LLPIXEL3.ttf"), 14);
                 Parent root = FXMLLoader.load(getClass().getResource("/fxml/MenuView.fxml"));
+                MediaManager.attachClickSoundToAllButtons(root);
     
                 Scene menuScene = new Scene(root);
                 stage.setScene(menuScene);
