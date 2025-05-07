@@ -14,10 +14,12 @@ public class Form {
     private int bottomYSpace;
     private int leftXSpace;
     private int topXSpace;
+    private int width;
+    private int height;
     
     private static final int[][][] FORMES_MATRICES = {
         // I
-        {{0,0,0,0}, {1,1,1,1}, {0,0,0,0}, {0,0,0,0}},
+        {{1,1,1,1}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0}},
         // J
         {{1,0,0}, {1,1,1}, {0,0,0}},
         // L
@@ -38,6 +40,7 @@ public class Form {
         leftXSpace = calculateLeftXSpace();
         topXSpace = calculateTopYSpace();
         bottomYSpace = calculateBottomYSpace();
+        calculateDim();
     }
 
     /**
@@ -173,8 +176,38 @@ public class Form {
         bottomYSpace = calculateBottomYSpace();
     }
 
+    private void calculateDim(){
+        int rows = matrice.length;
+        int cols = matrice[0].length;
+
+        int top = rows, bottom = -1;
+        int left = cols, right = -1;
+
+        for (int y = 0; y < rows; y++) {
+            for (int x = 0; x < cols; x++) {
+                if (matrice[y][x] != 0) {
+                    if (y < top) top = y;
+                    if (y > bottom) bottom = y;
+                    if (x < left) left = x;
+                    if (x > right) right = x;
+                }
+            }
+        }
+
+        width = (right - left + 1);
+        height = (bottom - top + 1);
+    }
+
     public int[][] getMatrice(){
         return matrice;
+    }
+
+    public int getHeight(){
+        return height;
+    }
+
+    public int getWidth(){
+        return width;
     }
 
     public int getRightXSpace(){

@@ -23,7 +23,7 @@
       </HBox>
       <VBox alignment="CENTER">
          <children>
-            <Text fx:id="MusicTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="MUSIC" />
+            <Text fx:id="MusicTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="VOLUME" />
             <Slider fx:id="MusicSlider" max="20.0" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" />
          </children>
       </VBox>

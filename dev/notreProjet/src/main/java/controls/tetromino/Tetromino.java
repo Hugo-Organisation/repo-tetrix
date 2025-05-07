@@ -10,47 +10,51 @@ import models.SandArea;
 public class Tetromino {
     private final Square[] squares;
     private Form form;
-    public Color current_couleur = COULEURS_POSSIBLES[new Random().nextInt(COULEURS_POSSIBLES.length)];
-    public Color previous_couleur = null;
+    private Color color;
     private double x,y;
+    private double xDiff,yDiff;
     private final int squareSize;
 
     private static final Color[] COULEURS_POSSIBLES = {
         // Color.BLUE, Color.ORANGE, Color.GREEN, 
         Color.RED, Color.PURPLE
     };
-
-    public void changeColor() {
-        Color new_color = COULEURS_POSSIBLES[new Random().nextInt(COULEURS_POSSIBLES.length)];
-        this.previous_couleur = current_couleur;
-        this.current_couleur = new_color;
-        for(int i = 0; i<4; i++){
-            squares[i].setFill(new_color);
-        }
-    }
     
     public Tetromino(int squareSize){
         this.squareSize= squareSize;
         x = 0;
         y = 0;
+        form = Form.getFormeAleatoire(squareSize);
+        color = COULEURS_POSSIBLES[new Random().nextInt(COULEURS_POSSIBLES.length)];
         squares = new Square[4];
         for(int i = 0; i<4; i++){
-            squares[i] = new Square(squareSize, current_couleur);
+            squares[i] = new Square(squareSize, color);
         }
-        form = Form.getFormeAleatoire(squareSize);
+        updateColor();
+        updateSquarePosition();
     }
 
     private void updateSquarePosition(){
+
+        xDiff = form.getWidth()*squareSize/2;
+        yDiff = form.getHeight()*squareSize/2;
+
         int[][] mat = form.getMatrice();
         int k = 0;
         for(int i=0; i<mat.length;i++){
             for(int j=0; j<mat.length;j++){
                 if(mat[i][j] == 1){
-                    squares[k].setX((j*squareSize + x));
-                    squares[k].setY((i*squareSize + y));
+                    squares[k].setX((j*squareSize + x - xDiff));
+                    squares[k].setY((i*squareSize + y - yDiff));
                     k++;
                 }
             }
+        }
+    }
+
+    private void updateColor(){
+        for(int i = 0; i<4; i++){
+            squares[i].setFill(color);
         }
     }
 
@@ -69,7 +73,7 @@ public class Tetromino {
         for(int k=0; k<4;k++){
             double X = squares[k].getX();
             double Y = squares[k].getY();
-            model.createBlock((int)X/particleSize, (int)Y/particleSize, current_couleur);
+            model.createBlock((int)X/particleSize, (int)Y/particleSize, color);
         }
     }
 
@@ -87,15 +91,15 @@ public class Tetromino {
     }
 
     public void setX(double X, double width, double height){
-        double minX = 0 - form.getLeftXSpace()*squareSize;
-        double maxX = width - form.getRightXSpace()*squareSize;
+        double minX = 0 - form.getLeftXSpace()*squareSize + xDiff;
+        double maxX = width - form.getRightXSpace()*squareSize + xDiff;
         x = Math.max(minX, Math.min(X, maxX));
         updateSquarePosition();
     }
 
     public void setY(double Y,double width, double height){
-        double minY = 0 - form.getTopYSpace()*squareSize;
-        double maxY = height - form.getBottomYSpace()*squareSize;
+        double minY = 0 - form.getTopYSpace()*squareSize + yDiff;
+        double maxY = height - form.getBottomYSpace()*squareSize + yDiff;
         y = Math.max(minY, Math.min(Y, maxY));
         updateSquarePosition();
     }
@@ -106,8 +110,32 @@ public class Tetromino {
         }
     }
 
-    public void reset(){
+    public void resetForm(){
         form = Form.getFormeAleatoire(squareSize);
         updateSquarePosition();
+        
+    }
+
+    public void resetColor() {
+        color = COULEURS_POSSIBLES[new Random().nextInt(COULEURS_POSSIBLES.length)];
+        updateColor();
+    }
+
+    public void setForm(Form newForm){
+        this.form = newForm;
+        updateSquarePosition();
+    }
+
+    public Form getForm(){
+        return form;
+    }
+
+    public void setColor(Color newColor){
+        this.color = newColor;
+        updateColor();
+    }
+
+    public Color getColor(){
+        return color;
     }
 }

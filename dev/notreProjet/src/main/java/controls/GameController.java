@@ -29,7 +29,9 @@ public class GameController {
     private final int fallTime = 10; //modifié
 
     private Tetromino tetromino;
+    private Tetromino prevTetromino;
     private Pane root;
+    private Pane preview;
     private Scene scene;
     private SandArea model;
 
@@ -37,7 +39,12 @@ public class GameController {
     private final int squareRatio = 10;
     private final int widthRatio = 10;
     private final int heightRatio = 14;
+<<<<<<< HEAD
     private final int destructionAnimation = 30; //modifié
+=======
+    private final int destructionAnimation = 30;
+    private final int previewSize = 100; 
+>>>>>>> de82dadd6a7b66c8ca3c9746410173bf73a83e7d
 
     private final int width = widthRatio*squareRatio*particleSize;
     private final int height = heightRatio*squareRatio*particleSize;
@@ -49,8 +56,9 @@ public class GameController {
     private final HashMap<Block,Square> particles = new HashMap<>();
 
 
-    public GameController(Pane root) {
+    public GameController(Pane root, Pane preview) {
         this.root = root;
+        this.preview = preview;
     }
 
     public void startGame(Stage primaryStage) {
@@ -61,6 +69,11 @@ public class GameController {
         tetromino = new Tetromino(squareRatio*particleSize);
         tetromino.addToRoot(root);
         tetromino.setX(initialX,width,height);
+
+        prevTetromino = new Tetromino(4*particleSize);
+        prevTetromino.addToRoot(preview);
+        prevTetromino.setX(previewSize/2,previewSize,previewSize);
+        prevTetromino.setY(previewSize/2,previewSize,previewSize);
 
         getCommand();
         updateFrame();
@@ -107,6 +120,7 @@ public class GameController {
     public void restartGame(){
         quitGame();
         root.getChildren().clear();
+        preview.getChildren().clear();
     }
 
     public void getCommand() {
@@ -130,7 +144,7 @@ public class GameController {
         ArrayList<Block> list = model.getNewBlocks();
         ArrayList<Block> toDelete = new ArrayList<>();
         for(Block block : list){
-            Square particle = new Square(v, tetromino.current_couleur);
+            Square particle = new Square(v, tetromino.getColor());
             particle.setX(block.getX()*v);
             particle.setY(block.getY()*v);
             particles.put(block, particle);
@@ -213,10 +227,14 @@ public class GameController {
         if (tetromino.checkFormCollision(model,0,vy,particleSize)) {
             tetromino.createParticleFromForm(model,particleSize);
             addNewBlocks();
+            tetromino.setForm(prevTetromino.getForm());
+            tetromino.setColor(prevTetromino.getColor());
             tetromino.setX(initialX,width,height);
             tetromino.setY(0,width,height);
-            tetromino.changeColor();
-            tetromino.reset();
+
+            prevTetromino.resetColor();
+            prevTetromino.resetForm();
+
             vx = 0;
             return;
          }
