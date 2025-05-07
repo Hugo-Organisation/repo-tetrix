@@ -26,7 +26,7 @@ public class GameTest {
         // Essaye de poser une forme par-dessus : collision attendue
         boolean result = testsandarea2.checkCollision(4, 3);
         assertTrue(result, "Collision attendue avec un bloc déjà présent");
-
+//
         //espace suffisant
         boolean result = testsandarea.checkCollision(1, 1);
         assertFalse(result, "Pas de collision attendue : zone vide");
