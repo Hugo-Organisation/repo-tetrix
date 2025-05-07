@@ -2,11 +2,23 @@ package models;
 
 import javafx.scene.paint.Color;
 
+/**
+ * Initialisation d'un block
+ * @param x abscisse du block
+ * @param y ordonnée du block
+ * @param color couleur du block
+ */
 public class Block {
     private int x;
     private int y;
     private Color color;
 
+    /**
+     * constructeur
+     * @param X
+     * @param Y
+     * @param current_couleur
+     */
     public Block(int X, int Y, Color current_couleur){
         x = X;
         y = Y;

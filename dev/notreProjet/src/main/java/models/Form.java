@@ -2,6 +2,12 @@ package models;
 
 import java.util.Random;
 
+/**
+ * Représente une forme Tetris (tétrimino) composée de blocs disposés selon une matrice.
+ * @param matrice Matrice représentant la forme du tétrimino
+ * @param rightXSpace Nombre de colonnes non vides à droite de la forme.
+ * @param bottomYSpace Nombre de lignes non vides en bas de la forme.
+ **/
 public class Form {
     private int[][] matrice;
     private int rightXSpace;
@@ -37,6 +43,12 @@ public class Form {
         calculateDim();
     }
 
+    /**
+     * Crée une forme parmis I,J,L,O,S,T,Z
+     * @param type entier compris entre 0 et 6 inclus
+     * @throws IllegalArgumentException type n'est pas une forme valide
+     * @return un type de forme
+     */
     public static Form createForm(int type) {
         if (type < 0 || type >= FORMES_MATRICES.length) {
             throw new IllegalArgumentException("Type de forme invalide: " + type);
@@ -44,13 +56,19 @@ public class Form {
         Form form = new Form(FORMES_MATRICES[type]);
         return form;
     }
-    
+
+    /**
+     * @return une forme aléatoire
+     */
     public static Form getFormeAleatoire(int blockSize) {
         int type = new Random().nextInt(FORMES_MATRICES.length);
         return createForm(type);
     }
 
-    
+    /**
+     *
+     * @return la position de la colonne la plus à droite contenant un bloc
+     */
     private int calculateRightXSpace() {
         int maxCol = 0;
         // Parcours toutes les lignes
@@ -138,7 +156,10 @@ public class Form {
         
         return emptyRows;
     }
-    
+
+    /**
+     * Fais pivoter le block de 90°
+     */
     public void rotation() {
         int n = matrice.length;
         int[][] nouvelleMatrice = new int[n][n];

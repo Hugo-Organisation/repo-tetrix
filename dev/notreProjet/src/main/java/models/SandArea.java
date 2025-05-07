@@ -10,6 +10,20 @@ import java.util.Set;
 
 import javafx.scene.paint.Color;
 
+/**
+ * Représente la zone de jeu principale où les blocs tombent, s'empilent et interagissent.
+ * Cette classe gère l'ensemble des blocs présents dans une grille 2D. Elle fournit
+ * des fonctions de :
+ * Création de blocs
+ * Détection de collision
+ * Animation des blocs (gravité, mouvement aléatoire)
+ * Recherche et suppression de clusters de blocs connectés
+ * @param width la largeur de la grille (en nombre de cellules)
+ * @param height la hauteur de la grille (en nombre de cellules)
+ * @param squareRatio la taille (en particules) d’un carré standard
+ * @param blocks Grille principale de la zone de jeu, contenant tous les blocs placés
+ * @param newBlocks Liste des nouveaux blocs ajoutés lors du dernier tour de jeu.
+ **/
 public class SandArea {
     private final int width;
     private final int height;
@@ -159,6 +173,9 @@ public class SandArea {
 
     }
 
+    /**
+     * Supprime les blocs appartenant à des clusters à supprimer
+     */
     public void removeBlocksToDelete() {
         List<List<Block>> clusterToDelete = findClusterToDelete();
 

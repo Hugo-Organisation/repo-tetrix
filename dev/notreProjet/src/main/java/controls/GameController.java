@@ -26,8 +26,8 @@ public class GameController {
     private Timeline timeline;
     private Parent pauseMenu;
     private boolean pauseToggle = false;
-    private int time = 0;
-    private final int fallTime = 10;
+    private int time = 0; //modifié
+    private final int fallTime = 10; //modifié
 
     private Tetromino tetromino;
     private Tetromino prevTetromino;
@@ -40,8 +40,12 @@ public class GameController {
     private final int squareRatio = 10;
     private final int widthRatio = 10;
     private final int heightRatio = 14;
+<<<<<<< HEAD
+    private final int destructionAnimation = 30; //modifié
+=======
     private final int destructionAnimation = 30;
     private final int previewSize = 100; 
+>>>>>>> de82dadd6a7b66c8ca3c9746410173bf73a83e7d
 
     private final int width = widthRatio*squareRatio*particleSize;
     private final int height = heightRatio*squareRatio*particleSize;
