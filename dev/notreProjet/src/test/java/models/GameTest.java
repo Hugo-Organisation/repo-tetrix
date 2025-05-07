@@ -10,7 +10,14 @@ public class GameTest {
 
     @Test
     void testCheckCollision() {
-
+    height = 10;
+    newX = 2;
+    newY = 9;
+    squareRatio = 2;
+    if (checkCollision(int newX, int newY) == false) {
+        fail("newY>= height - squareRatio")
+        }
+    
     }
 
     @Test
