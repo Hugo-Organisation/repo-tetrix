@@ -72,7 +72,7 @@ public class MenuViewCtrl implements javafx.fxml.Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        MediaPlayer player = MediaManager.getInstance().getMediaPlayer();
+        MediaPlayer player = MediaManager.getInstance().getMusicPlayer();
         if (player != null) {
             MusicSlider.setValue(player.getVolume()*20);
             MusicSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
