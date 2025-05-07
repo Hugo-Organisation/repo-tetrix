@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<VBox alignment="CENTER" prefHeight="700.0" prefWidth="650.0" spacing="100.0" styleClass="root" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.ParametresMenuViewCtrl">
+   <children>
+      <Text fx:id="Title" strokeType="OUTSIDE" strokeWidth="0.0" text="SANDTRIS" textAlignment="CENTER">
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </Text>
+      <HBox alignment="CENTER" spacing="60.0">
+         <children>
+            <ToggleButton fx:id="musicToggle" mnemonicParsing="false" onMouseClicked="#onClic" text="MUSIC" />
+            <ToggleButton fx:id="soundFxToggle" mnemonicParsing="false" onMouseClicked="#onClic" text="SOUND FX" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" spacing="60.0">
+         <children>
+            <Button fx:id="menuButton" mnemonicParsing="false" onMouseClicked="#onClic" text="MENU" />
+         </children>
+      </HBox>
+   </children>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+   <stylesheets>
+      <URL value="@../css/MenuViewCSS.css" />
+      <URL value="@../css/ToggleButton.css" />
+   </stylesheets>
+</VBox>

@@ -1,0 +1,37 @@
+ToggleButton {
+    -fx-pref-width: 160px;
+    -fx-pref-height: 70px;
+    -fx-font-size: 20px;
+    -fx-text-fill: #fcebb3;
+    -fx-background-color: linear-gradient(to bottom, #4a3932, #2e211d);
+    -fx-border-color: #cfae88;
+    -fx-border-width: 3px;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-effect: innershadow(gaussian, #000000, 3, 0.6, 0, 2);
+}
+
+/* Hover non sélectionné */
+ToggleButton:hover {
+    -fx-background-color: linear-gradient(to bottom, #6b5145, #3e2e28);
+    -fx-border-color: #ffffff;
+    -fx-text-fill: #ffe28a;
+}
+
+/* Sélectionné */
+ToggleButton:selected {
+    -fx-background-color: linear-gradient(to bottom, #a05d2a, #5a2e12);
+    -fx-text-fill: #ffffff;
+    -fx-border-color: #ffd700;
+    -fx-border-width: 4px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, #ffcc33, 5, 0.8, 0, 1);
+}
+
+/* Hover + sélectionné */
+ToggleButton:hover:selected {
+    -fx-background-color: linear-gradient(to bottom, #c47a3a, #723c1c);
+    -fx-border-color: #fff1a0;
+    -fx-text-fill: #ffffff;
+    -fx-effect: dropshadow(gaussian, #fff1a0, 6, 0.9, 0, 1);
+}

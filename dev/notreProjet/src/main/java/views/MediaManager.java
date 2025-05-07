@@ -11,20 +11,23 @@ public class MediaManager {
 
     private static MediaManager instance;
 
-    private MediaPlayer musicPlayer;
-    private MediaPlayer destructionPlayer;
-    private MediaPlayer groundCollisionPlayer;
+    private double volume = 0.5;
 
+    private MediaPlayer musicPlayer;
+
+    private MediaPlayer fxPlayer;
     private Media destructionMedia;
     private Media groundCollisionMedia;
-    private boolean soundPreloaded = false;
-
-    private boolean isCollisionPlaying = false;
-    private boolean isDestructionPlaying = false;
-
+    private boolean isFxPlaying = false;
+    
     private Media clickSoundMedia;
     private MediaPlayer clickSoundPlayer;
     private boolean isClickPlaying = false;
+
+    private boolean enableFx = true;
+    private boolean enableMusic = true;
+
+    private boolean soundPreloaded = false;
 
     private MediaManager() {
     }
@@ -36,21 +39,57 @@ public class MediaManager {
         return instance;
     }
 
-    public MediaPlayer getMusicPlayer() {
+    public double getVolume() {
+        return volume;
+    }
+
+    public void switchFxSound(){
+        enableFx = !enableFx;
+        reloadVolume();
+    }
+
+    public void switchMusicSound(){
+        enableMusic = !enableMusic;
+        reloadVolume();
+    }
+
+    public boolean getEnableMusic(){
+        return enableMusic;
+    }
+
+    public boolean getEnableFx(){
+        return enableFx;
+    }
+
+    private void reloadVolume(){
+        try {
+            musicPlayer.setVolume(volume*(enableMusic?1:0));
+            fxPlayer.setVolume(volume*(enableFx?1:0));
+            clickSoundPlayer.setVolume(volume*(enableFx?1:0));
+        }
+        catch (Exception e) {
+        }
+    }
+
+    public void setVolume(double volume) {
+        this.volume = volume;
+        reloadVolume();
+    }
+
+    public void setMusicPlayer() {
         if (musicPlayer == null) {
             try {
                 String musicFile = getClass().getResource("/mp3/made_in_abyss_drums.wav").toExternalForm();
                 Media media = new Media(musicFile);
                 musicPlayer = new MediaPlayer(media);
                 musicPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-                musicPlayer.setVolume(0.5);
+                musicPlayer.setVolume(volume*(enableMusic?1:0));
                 musicPlayer.play();
             } catch (Exception e) {
                 System.err.println("Erreur lors de la lecture du média : " + e.getMessage());
                 e.printStackTrace();
             }
         }
-        return musicPlayer;
     }
 
     public void preloadSounds() {
@@ -58,29 +97,13 @@ public class MediaManager {
             try {
                 String destructionPath = getClass().getResource("/mp3/mario_hit.wav").toExternalForm();
                 destructionMedia = new Media(destructionPath);
-                destructionPlayer = new MediaPlayer(destructionMedia);
-                destructionPlayer.setOnEndOfMedia(() -> {
-                    destructionPlayer.dispose();
-                    isDestructionPlaying = false;
-                });
 
 
                 String collisionPath = getClass().getResource("/mp3/minecraft_placing_block.wav").toExternalForm();
                 groundCollisionMedia = new Media(collisionPath);
-                groundCollisionPlayer = new MediaPlayer(groundCollisionMedia);
-                groundCollisionPlayer.setOnEndOfMedia(() -> {
-                    groundCollisionPlayer.dispose();
-                    isCollisionPlaying = false;
-                });
-
-                String clickPath = getClass().getResource("/mp3/minecraft_placing_block.wav").toExternalForm();
+                
+                String clickPath = getClass().getResource("/mp3/menu_clic_sound.wav").toExternalForm();
                 clickSoundMedia = new Media(clickPath);
-                clickSoundPlayer = new MediaPlayer(clickSoundMedia);
-                clickSoundPlayer.setOnEndOfMedia(() -> {
-                    clickSoundPlayer.dispose();
-                    isClickPlaying = false;
-                });
-
                 
                 soundPreloaded = true;
             } catch (Exception e) {
@@ -90,31 +113,30 @@ public class MediaManager {
         }
     }
 
-    public void playDestructionSound() {
-        if (destructionMedia == null || isDestructionPlaying) return;
-        destructionPlayer = new MediaPlayer(destructionMedia);
-        destructionPlayer.setOnEndOfMedia(() -> {
-            destructionPlayer.dispose();
-            isDestructionPlaying = false;
+    public void playMediaSound(Media media) {
+        if (media == null || isFxPlaying) return;
+        fxPlayer = new MediaPlayer(media);
+        fxPlayer.setVolume(volume*(enableFx?1:0));
+        fxPlayer.setOnEndOfMedia(() -> {
+            fxPlayer.dispose();
+            isFxPlaying = false;
         });
-        isDestructionPlaying = true;
-        destructionPlayer.play();
+        isFxPlaying = true;
+        fxPlayer.play();
     }
 
     public void playGroundCollisionSound() {
-        if (groundCollisionMedia == null || isCollisionPlaying) return;
-        groundCollisionPlayer = new MediaPlayer(groundCollisionMedia);
-        groundCollisionPlayer.setOnEndOfMedia(() -> {
-            groundCollisionPlayer.dispose();
-            isCollisionPlaying = false;
-        });
-        isCollisionPlaying = true;
-        groundCollisionPlayer.play();
+        playMediaSound(groundCollisionMedia);
+    }
+
+    public void playDestructionSound(){
+        playMediaSound(destructionMedia);
     }
 
     public void playClickSound() {
         if (groundCollisionMedia == null || isClickPlaying) return;
         clickSoundPlayer = new MediaPlayer(clickSoundMedia);
+        clickSoundPlayer.setVolume(volume*(enableFx?1:0));
         clickSoundPlayer.setOnEndOfMedia(() -> {
             clickSoundPlayer.dispose();
             isClickPlaying = false;
