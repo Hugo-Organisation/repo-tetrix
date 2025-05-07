@@ -1,44 +1,35 @@
 package views;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-import controls.GameController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-public class PauseMenuCtrl {
-
-    private GameController gameController;
-
-    public void setGameController(GameController gameController) {
-        this.gameController = gameController;
-    }
+public class ParametresMenuViewCtrl implements javafx.fxml.Initializable {
 
     @FXML
-    private VBox root;
+    private ToggleButton musicToggle;
 
     @FXML
-    private Button quitButton;
+    private ToggleButton soundFxToggle;
 
     @FXML
-    private Button restartButton;
-
-    @FXML
-    private Button resumeButton;
+    private Button menuButton;
 
     @FXML
     void onClic(MouseEvent event) {
-        if (event.getSource().equals(quitButton)){
+        if (event.getSource().equals(menuButton)){
             try {
-                gameController.quitGame();
-                Stage stage = (Stage) quitButton.getScene().getWindow();
+                Stage stage = (Stage) menuButton.getScene().getWindow();
                 Font.loadFont(getClass().getResourceAsStream("/fonts/LLPIXEL3.ttf"), 14);
                 Parent root = FXMLLoader.load(getClass().getResource("/fxml/MenuView.fxml"));
                 MediaManager.attachClickSoundToAllButtons(root);
@@ -53,19 +44,18 @@ public class PauseMenuCtrl {
                 return;
             }
         }
-        if (event.getSource().equals(restartButton)){
-            Stage stage = (Stage) restartButton.getScene().getWindow();
-            gameController.restartGame();
-            gameController.startGame(stage);
+        if(event.getSource().equals(soundFxToggle)){
+            MediaManager.getInstance().switchFxSound();
+        }
+        if(event.getSource().equals(musicToggle)){
+            MediaManager.getInstance().switchMusicSound();
         }
     }
 
-    public void setResumeButton(Runnable action) {
-        resumeButton.setOnAction(e -> action.run());
-    }
-
-    public double getHeight(){
-        return root.getPrefHeight();
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        musicToggle.setSelected(MediaManager.getInstance().getEnableMusic());
+        soundFxToggle.setSelected(MediaManager.getInstance().getEnableFx());
     }
 
 }

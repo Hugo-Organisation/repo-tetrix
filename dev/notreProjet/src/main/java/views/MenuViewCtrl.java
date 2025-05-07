@@ -11,7 +11,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -47,7 +46,23 @@ public class MenuViewCtrl implements javafx.fxml.Initializable {
             Stage stage = (Stage) startButton.getScene().getWindow();
             try{
                 Parent root = FXMLLoader.load(getClass().getResource("/fxml/JeuView.fxml"));
-                // root.requestFocus();
+                MediaManager.attachClickSoundToAllButtons(root);
+                
+                Scene menuScene = new Scene(root);
+                stage.setScene(menuScene);
+                stage.sizeToScene();
+                stage.show();
+            }
+            catch(IOException e){
+                e.printStackTrace();
+                return;
+            }
+        }
+        if (event.getSource().equals(parametresButton)) {
+            Stage stage = (Stage) startButton.getScene().getWindow();
+            try{
+                Parent root = FXMLLoader.load(getClass().getResource("/fxml/ParametresMenuView.fxml"));
+                MediaManager.attachClickSoundToAllButtons(root);
                 
                 Scene menuScene = new Scene(root);
                 stage.setScene(menuScene);
@@ -72,16 +87,12 @@ public class MenuViewCtrl implements javafx.fxml.Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        MediaPlayer player = MediaManager.getInstance().getMusicPlayer();
-        if (player != null) {
-            MusicSlider.setValue(player.getVolume()*20);
-            MusicSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
-                player.setVolume(newVal.doubleValue()/20);
-            });
-        } else {
-            System.err.println("Le MediaPlayer n'a pas pu être initialisé.");
-        }
+        MediaManager instance = MediaManager.getInstance();
+        instance.setMusicPlayer();
+        MusicSlider.setValue(instance.getVolume()*20);
+        MusicSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            instance.setVolume(newVal.doubleValue()/20);
+        });
     }
-
 }
 
