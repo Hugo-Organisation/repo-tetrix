@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import models.Block;
 import models.SandArea;
+import views.MediaManager;
 import views.PauseMenuCtrl;
 
 
@@ -207,6 +208,7 @@ public class GameController {
         }
 
         if(model.getDeletedBlocks()!=null && !model.getDeletedBlocks().isEmpty()){
+            MediaManager.getInstance().playDestructionSound();
             vy = 0;
         }
         else{
@@ -221,6 +223,8 @@ public class GameController {
             timeline.pause();
         }
         if (tetromino.checkFormCollision(model,0,vy,particleSize)) {
+            MediaManager.getInstance().playGroundCollisionSound();
+
             tetromino.createParticleFromForm(model,particleSize);
             addNewBlocks();
             tetromino.setForm(prevTetromino.getForm());
