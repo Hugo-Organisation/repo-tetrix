@@ -47,6 +47,7 @@ public class GameController {
     private final int width = widthRatio*squareRatio*particleSize;
     private final int height = heightRatio*squareRatio*particleSize;
     private final double initialX = (widthRatio/2)*squareRatio*particleSize;
+    private final double initialY = squareRatio*particleSize/2;
     private final int v = particleSize;
     private double vy = v;
     private double vx = 0;
@@ -222,7 +223,7 @@ public class GameController {
         double newX = tetromino.getX() + vx;
         double newY = tetromino.getY() + vy;
 
-        if (tetromino.checkFormCollision(model,0,vy,particleSize) && tetromino.getY() == 0) {
+        if (tetromino.checkFormCollision(model,0,vy,particleSize) && tetromino.getY() == initialY) {
             timeline.pause();
         }
         if (tetromino.checkFormCollision(model,0,vy,particleSize)) {
