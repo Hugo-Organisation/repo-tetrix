@@ -16,7 +16,7 @@ public class Tetromino {
     private final int squareSize;
 
     private static final Color[] COULEURS_POSSIBLES = {
-        // Color.BLUE, Color.ORANGE, Color.GREEN, 
+        Color.BLUE, Color.ORANGE, Color.GREEN, 
         Color.RED, Color.PURPLE
     };
     
