@@ -100,7 +100,7 @@ public class SandArea {
         }
     }
 
-    private List<List<Block>> findCluster() {
+    public List<List<Block>> findCluster() {
         Set<Block> visited = new HashSet<>();
         List<List<Block>> allClusters = new ArrayList<>();
     
@@ -274,4 +274,9 @@ public class SandArea {
         block.setXY(newJ,newI);
         movedBlocks.add(block);
     }
+
+    public void setBlock(Block block) {
+        blocks[block.getY()][block.getX()] = block;
+    }
+
 }
