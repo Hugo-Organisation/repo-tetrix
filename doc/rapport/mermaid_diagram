@@ -151,5 +151,5 @@ SandArea --> Block
 Tetromino --> Square
 Tetromino --> Form
 
-ParametresMenuViewCtrl --> MediaManager
-ParametresMenuViewCtrl --> MenuViewCtrl
+PauseMenuCtrl --> MediaManager
+PauseMenuCtrl --> MenuViewCtrl
