@@ -3,6 +3,12 @@ package controls;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.io.File;
+import java.io.IOException;
+
 
 import controls.tetromino.Square;
 import controls.tetromino.Tetromino;
@@ -226,6 +232,9 @@ public class GameController {
 
         if (tetromino.checkFormCollision(model,0,vy,particleSize) && tetromino.getY() == initialY) {
             timeline.pause();
+         // Enregistre le score actuel dans un fichier
+            int finalScore = model.scoreProperty().get();
+            saveScoreToFile(finalScore);
         }
         if (tetromino.checkFormCollision(model,0,vy,particleSize)) {
             MediaManager.getInstance().playGroundCollisionSound();
@@ -259,5 +268,18 @@ public class GameController {
    
     public IntegerProperty scoreProperty() {
         return model.scoreProperty();
+    }
+    
+    private void saveScoreToFile(int score) {
+        try {
+            File file = new File("scores.txt");
+            FileWriter fw = new FileWriter(file, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter out = new PrintWriter(bw);
+            out.println(score);
+            out.close();
+        } catch (IOException e) {
+            System.err.println("Erreur lors de l'enregistrement du score : " + e.getMessage());
+        }
     }
 }
