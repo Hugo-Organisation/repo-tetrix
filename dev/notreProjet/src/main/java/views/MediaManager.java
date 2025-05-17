@@ -114,7 +114,7 @@ public class MediaManager {
     }
 
     public void playMediaSound(Media media) {
-        if (media == null || isFxPlaying) return;
+        if (media == null || isFxPlaying || !enableFx) return;
         fxPlayer = new MediaPlayer(media);
         fxPlayer.setVolume(volume*(enableFx?1:0));
         fxPlayer.setOnEndOfMedia(() -> {
@@ -134,7 +134,7 @@ public class MediaManager {
     }
 
     public void playClickSound() {
-        if (groundCollisionMedia == null || isClickPlaying) return;
+        if (groundCollisionMedia == null || isClickPlaying || !enableFx) return;
         clickSoundPlayer = new MediaPlayer(clickSoundMedia);
         clickSoundPlayer.setVolume(volume*(enableFx?1:0));
         clickSoundPlayer.setOnEndOfMedia(() -> {
