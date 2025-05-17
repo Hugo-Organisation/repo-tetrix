@@ -26,6 +26,7 @@ import models.Block;
 import models.SandArea;
 import views.MediaManager;
 import views.PauseMenuCtrl;
+import views.GameOverViewCtrl;
 import javafx.beans.property.IntegerProperty;
 
 
@@ -232,9 +233,10 @@ public class GameController {
 
         if (tetromino.checkFormCollision(model,0,vy,particleSize) && tetromino.getY() == initialY) {
             timeline.pause();
-         // Enregistre le score actuel dans un fichier
+         // Enregistre le score actuel dans un fichier et envoie game over
             int finalScore = model.scoreProperty().get();
             saveScoreToFile(finalScore);
+            showGameOverScreen();
         }
         if (tetromino.checkFormCollision(model,0,vy,particleSize)) {
             MediaManager.getInstance().playGroundCollisionSound();
@@ -282,4 +284,22 @@ public class GameController {
             System.err.println("Erreur lors de l'enregistrement du score : " + e.getMessage());
         }
     }
+    
+    private void showGameOverScreen() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GameOverView.fxml"));
+            Parent gameOverRoot = loader.load();
+
+            GameOverViewCtrl controller = loader.getController();
+            controller.setScore(model.scoreProperty().get()); // Passe le score
+
+            Stage stage = (Stage) root.getScene().getWindow();
+            Scene gameOverScene = new Scene(gameOverRoot);
+            stage.setScene(gameOverScene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
