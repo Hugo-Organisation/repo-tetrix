@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+
 
 import javafx.scene.paint.Color;
 
@@ -32,6 +35,8 @@ public class SandArea {
     private final ArrayList<Block> newBlocks;
     private final ArrayList<Block> deletedBlocks;
     private final ArrayList<Block> movedBlocks;
+    private IntegerProperty score = new SimpleIntegerProperty(0);
+
 
     /**
      * Il s'agit du constructeur.
@@ -172,7 +177,16 @@ public class SandArea {
         return clusterToDelete;
 
     }
-
+    
+    public IntegerProperty scoreProperty() {
+        return score;
+    }
+    
+ // Méthode pour ajouter des points au score
+    public void addScore(int points) {
+        score.set(score.get() + points);
+    }
+    
     /**
      * Supprime les blocs appartenant à des clusters à supprimer
      */
@@ -181,8 +195,11 @@ public class SandArea {
 
         
         for (int i = 0; i < clusterToDelete.size(); i ++) {
+        	int clusterSize = clusterToDelete.get(i).size();
+            addScore(clusterSize);
             for (int j = 0; j < clusterToDelete.get(i).size(); j ++) {
                 deletedBlocks.add(clusterToDelete.get(i).get(j));
+                score.set(score.get() + 1);
             }
         }
         

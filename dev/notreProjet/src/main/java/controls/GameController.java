@@ -20,6 +20,7 @@ import models.Block;
 import models.SandArea;
 import views.MediaManager;
 import views.PauseMenuCtrl;
+import javafx.beans.property.IntegerProperty;
 
 
 public class GameController {
@@ -255,5 +256,8 @@ public class GameController {
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
     }
-
+   
+    public IntegerProperty scoreProperty() {
+        return model.scoreProperty();
+    }
 }

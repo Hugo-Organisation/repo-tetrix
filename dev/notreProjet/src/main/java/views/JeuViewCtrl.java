@@ -21,6 +21,10 @@ public class JeuViewCtrl implements javafx.fxml.Initializable {
 
     @FXML
     private Button pauseButton;
+    
+    @FXML
+    private javafx.scene.control.Label scoreLabel;
+
 
         @FXML
     void onClic(MouseEvent event) {
@@ -29,12 +33,14 @@ public class JeuViewCtrl implements javafx.fxml.Initializable {
         }
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        javafx.application.Platform.runLater(() -> {
-            Stage stage = (Stage) gamePane.getScene().getWindow();
-            controller = new GameController(gamePane,previewPane);
-            controller.startGame(stage);
-        });
-    }
+        @Override
+        public void initialize(URL url, ResourceBundle resourceBundle) {
+            javafx.application.Platform.runLater(() -> {
+                Stage stage = (Stage) gamePane.getScene().getWindow();
+                controller = new GameController(gamePane, previewPane);
+                controller.startGame(stage);
+                scoreLabel.textProperty().bind(controller.scoreProperty().asString(" %d"));
+            });
+        }
+
 }

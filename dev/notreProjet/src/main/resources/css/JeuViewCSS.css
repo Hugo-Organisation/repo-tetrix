@@ -48,3 +48,11 @@ Pane {
     -fx-background-image: url("../images/brick_wall.png");
 
 }
+
+#scoreLabel {
+    -fx-font-size: 22px;
+    -fx-text-fill: #ffe28a;
+    -fx-alignment: center;
+    -fx-wrap-text: true;
+    -fx-text-alignment: center;
+}

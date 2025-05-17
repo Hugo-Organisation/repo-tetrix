@@ -14,12 +14,12 @@
          <children>
             <Button fx:id="pauseButton" onMouseClicked="#onClic" mnemonicParsing="false" text="Pause" />
             <Pane fx:id="previewPane" prefHeight="100.0" prefWidth="100.0" />
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <VBox prefWidth="100.0" spacing="5.0">
                <children>
                   <Label text="Score :" />
-                  <Label text="1000" />
+                  <Label fx:id="scoreLabel" text="0" style="-fx-wrap-text: true;" />
                </children>
-            </HBox>
+            </VBox>
          </children>
          <HBox.margin>
             <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
