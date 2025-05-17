@@ -26,7 +26,7 @@ public class JeuViewCtrl implements javafx.fxml.Initializable {
     private javafx.scene.control.Label scoreLabel;
 
 
-        @FXML
+    @FXML
     void onClic(MouseEvent event) {
         if (event.getSource().equals(pauseButton)){
             controller.pauseGame();

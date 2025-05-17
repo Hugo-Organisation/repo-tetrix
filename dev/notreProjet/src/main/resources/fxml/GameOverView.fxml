@@ -12,13 +12,15 @@
       fx:controller="views.GameOverViewCtrl">
     
     <children>
+        <Text text="GAME OVER" />
+
         <Text fx:id="scoreText" text="Score: 0" />
 
         <VBox alignment="CENTER" spacing="15.0">
             <children>
                 <Text text="Entrez votre pseudo :" />
                 <TextField fx:id="pseudoField" />
-                <Button fx:id="submitButton" text="Valider" onMouseClicked="#onClick"/>
+                <Button fx:id="submitButton" text="VALIDER" onMouseClicked="#onClick"/>
             </children>
         </VBox>
 

@@ -1,12 +1,13 @@
 package views;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.fxml.FXMLLoader;
 
 import java.io.*;
 import java.util.*;
@@ -20,6 +21,13 @@ public class LeaderboardViewCtrl {
     public void initialize() {
         List<String> scores = readScores();
         scoreList.getItems().addAll(scores);
+
+        // Ajout du son aux boutons une fois la scène chargée
+        Platform.runLater(() -> {
+            if (scoreList.getScene() != null) {
+                MediaManager.attachClickSoundToAllButtons(scoreList.getScene().getRoot());
+            }
+        });
     }
 
     private List<String> readScores() {
@@ -35,9 +43,9 @@ public class LeaderboardViewCtrl {
                 .sorted((a, b) -> {
                     int scoreA = Integer.parseInt(a.split(":")[1].trim());
                     int scoreB = Integer.parseInt(b.split(":")[1].trim());
-                    return Integer.compare(scoreB, scoreA); // plus gros score en haut
+                    return Integer.compare(scoreB, scoreA);
                 })
-                .limit(10) // top 10
+                .limit(10)
                 .forEach(lines::add);
         } catch (IOException e) {
             e.printStackTrace();
@@ -49,9 +57,24 @@ public class LeaderboardViewCtrl {
     private void onReturnClick(MouseEvent event) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/MenuView.fxml"));
+            MediaManager.attachClickSoundToAllButtons(root);
             Stage stage = (Stage) scoreList.getScene().getWindow();
-            Scene menuScene = new Scene(root);
-            stage.setScene(menuScene);
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void onResetClick(MouseEvent event) {
+        clearScores();
+        scoreList.getItems().clear();
+    }
+
+    private void clearScores() {
+        File file = new File("leaderboard.txt");
+        try (PrintWriter writer = new PrintWriter(file)) {
+            // Vide le fichier
         } catch (IOException e) {
             e.printStackTrace();
         }

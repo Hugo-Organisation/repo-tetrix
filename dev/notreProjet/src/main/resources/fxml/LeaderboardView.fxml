@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
 
 <VBox alignment="CENTER" spacing="40.0"
       prefHeight="700.0" prefWidth="650.0"
@@ -9,10 +10,16 @@
       stylesheets="@../css/MenuViewCSS.css"
       xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="views.LeaderboardViewCtrl">
-    
+
     <children>
-        <Label text="LEADERBOARD" style="-fx-font-size: 48px; -fx-text-fill: white;" />
+        <Text text="LEADERBOARD" />
         <ListView fx:id="scoreList" prefHeight="400.0" prefWidth="500.0" />
-        <Button text="RETOUR" onMouseClicked="#onReturnClick" />
+        
+        <HBox spacing="40.0" alignment="CENTER">
+            <children>
+                <Button text="RETOUR" onMouseClicked="#onReturnClick" />
+                <Button text="RESET" onMouseClicked="#onResetClick" />
+            </children>
+        </HBox>
     </children>
 </VBox>

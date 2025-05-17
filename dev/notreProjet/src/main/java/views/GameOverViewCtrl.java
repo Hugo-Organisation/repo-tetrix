@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import controls.GameController;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -41,11 +43,29 @@ public class GameOverViewCtrl {
     }
 
     @FXML
+    public void initialize() {
+        Platform.runLater(() -> {
+            if (restartButton.getScene() != null) {
+                MediaManager.attachClickSoundToAllButtons(restartButton.getScene().getRoot());
+            }
+        });
+    }
+
+    @FXML
     void onClick(MouseEvent event) {
         Stage stage = (Stage) restartButton.getScene().getWindow();
 
         if (event.getSource() == quitButton) {
-            stage.close();
+            try {
+                Font.loadFont(getClass().getResourceAsStream("/fonts/LLPIXEL3.ttf"), 14); // facultatif
+                Parent root = FXMLLoader.load(getClass().getResource("/fxml/MenuView.fxml"));
+                MediaManager.attachClickSoundToAllButtons(root);
+                stage.setScene(new Scene(root));
+                stage.sizeToScene();
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
         } else if (event.getSource() == restartButton) {
             if (gameController != null) {
@@ -84,5 +104,4 @@ public class GameOverViewCtrl {
             e.printStackTrace();
         }
     }
-
 }
