@@ -126,11 +126,25 @@ public class GameController {
         timeline.stop();
     }
 
-    public void restartGame(){
+    public void restartGame(Stage stage) {
         quitGame();
         root.getChildren().clear();
         preview.getChildren().clear();
+        model = new SandArea(widthRatio * squareRatio, heightRatio * squareRatio, squareRatio);
+        model.resetscore();
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/JeuView.fxml"));
+            Parent rootNode = loader.load();
+            MediaManager.attachClickSoundToAllButtons(rootNode);
+            stage.setScene(new Scene(rootNode));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
     public void getCommand() {
         scene.setOnKeyPressed(event -> {
@@ -232,10 +246,7 @@ public class GameController {
         double newY = tetromino.getY() + vy;
 
         if (tetromino.checkFormCollision(model,0,vy,particleSize) && tetromino.getY() == initialY) {
-            timeline.pause();
-         // Enregistre le score actuel dans un fichier et envoie game over
-            int finalScore = model.scoreProperty().get();
-            saveScoreToFile(finalScore);
+            timeline.stop();
             showGameOverScreen();
         }
         if (tetromino.checkFormCollision(model,0,vy,particleSize)) {
@@ -272,18 +283,6 @@ public class GameController {
         return model.scoreProperty();
     }
     
-    private void saveScoreToFile(int score) {
-        try {
-            File file = new File("scores.txt");
-            FileWriter fw = new FileWriter(file, true);
-            BufferedWriter bw = new BufferedWriter(fw);
-            PrintWriter out = new PrintWriter(bw);
-            out.println(score);
-            out.close();
-        } catch (IOException e) {
-            System.err.println("Erreur lors de l'enregistrement du score : " + e.getMessage());
-        }
-    }
     
     private void showGameOverScreen() {
         try {
@@ -291,7 +290,8 @@ public class GameController {
             Parent gameOverRoot = loader.load();
 
             GameOverViewCtrl controller = loader.getController();
-            controller.setScore(model.scoreProperty().get()); // Passe le score
+            controller.setScore(model.scoreProperty().get());
+            controller.setGameController(this);
 
             Stage stage = (Stage) root.getScene().getWindow();
             Scene gameOverScene = new Scene(gameOverRoot);
@@ -301,5 +301,6 @@ public class GameController {
             e.printStackTrace();
         }
     }
+
 
 }

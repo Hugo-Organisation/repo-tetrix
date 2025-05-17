@@ -82,6 +82,17 @@ public class MenuViewCtrl implements javafx.fxml.Initializable {
             Stage stage = (Stage) aboutButton.getScene().getWindow();
 
         }
+        if (event.getSource().equals(leaderboardButton)) {
+            Stage stage = (Stage) leaderboardButton.getScene().getWindow();
+            try {
+                Parent root = FXMLLoader.load(getClass().getResource("/fxml/LeaderboardView.fxml"));
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 

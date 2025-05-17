@@ -53,11 +53,11 @@ public class PauseMenuCtrl {
                 return;
             }
         }
-        if (event.getSource().equals(restartButton)){
+        if (event.getSource().equals(restartButton)) {
             Stage stage = (Stage) restartButton.getScene().getWindow();
-            gameController.restartGame();
-            gameController.startGame(stage);
+            gameController.restartGame(stage);
         }
+
     }
 
     public void setResumeButton(Runnable action) {

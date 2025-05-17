@@ -295,5 +295,9 @@ public class SandArea {
     public void setBlock(Block block) {
         blocks[block.getY()][block.getX()] = block;
     }
+    
+    public void resetscore() {
+        score.set(0);
+    }
 
 }
