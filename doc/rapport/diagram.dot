@@ -15,6 +15,8 @@ digraph UML {
     MenuViewCtrl [label="{MenuViewCtrl| + initialize(URL, ResourceBundle) : void}"];
     JeuViewCtrl [label="{JeuViewCtrl| + initialize(URL, ResourceBundle) : void}"];
     ParametresMenuViewCtrl [label="{ParametresMenuViewCtrl| + initialize(URL, ResourceBundle) : void}"];
+    GameOverViewCtrl [label="{GameOverViewCtrl| + initialize(URL, ResourceBundle) : void}"];
+    LeaderboardViewCtrl [label="{LeaderboardViewCtrl| + initialize(URL, ResourceBundle) : void}"];
     AboutViewCtrl [label="AboutViewCtrl"];
     MediaManager [label="{MediaManager| - MediaManager()\l + static getInstance()\l + getVolume() : double\l + switchFxSound() : void\l + switchMusicSound() : void\l + getEnableMusic() : boolean\l + getEnableFx() : boolean\l - reloadVolume() : void\l + setVolume(double) : void\l + setMusicPlayer() : void\l + preloadSounds() : void\l + playMediaSound(Media) : void\l + playGroundCollisionSound() : void\l + playDestructionSound() : void\l + playClickSound() : void\l + static attachClickSoundToAllButtons(Parent) : void}"];
   }
@@ -55,6 +57,9 @@ digraph UML {
   GameController -> PauseMenuCtrl;
   GameController -> Square;
   GameController -> MediaManager;
+  GameController -> GameOverViewCtrl
+
+  GameOverViewCtrl -> MenuViewCtrl
 
   SandArea -> Block;
 
